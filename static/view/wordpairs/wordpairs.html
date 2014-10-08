@@ -1,0 +1,11 @@
+<div id="loading" ng-hide="wordpairs">loading...</div>
+<div id="wordpaircontainer"  ng-show="wordpairs">
+  <div id="wordpairs" ng-init="start()">
+  {{wordpairs[curPair][0]}} {{wordpairs[curPair][1]}}
+  </div>
+  <div class="curword">{{curPair+1}} of {{wordpairs.length}}</div>
+  <div id="progressbarcontainer">
+    <div id="progress" ng-style="progressbarStyle"><div id="progressfiller"></div></div>
+    <span id="timeleft">{{timeLeft}}</span>
+  </div>
+</div>

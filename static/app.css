@@ -1,0 +1,253 @@
+/* papt css stylesheet */
+body {
+  font-family: helvetica, sans-serif;
+}
+
+#userid {
+  position: absolute;
+  top: 0;
+  right: 30px;
+  font-size: 10pt;
+  background: #dddddd;
+  padding-right: 50px;
+  padding-left: 50px;
+  padding-bottom: 10px;
+  margin-top: -1.5em;
+  -webkit-transition: margin-top 200ms;
+  transition: margin-top 200ms;
+  -webkit-border-radius: 0 0 10px 10px;
+  -moz-border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 10px;
+}
+
+#userid:hover {
+  margin-top: 0;
+}
+#userid > button {
+  clear: both;
+  display: block;
+  margin-bottom: 8px;
+}
+
+#login {
+  background: #dddddd;
+  padding: 20px;
+  position: absolute;
+  width: 350px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+}
+#login label {
+  float: left;
+  margin-right: 5px;
+}
+
+.loginerror {
+  clear: both;
+  margin: 10px;
+  padding: 10px;
+  color: #ffffff;
+  background: #cc3333;
+  font-weight: bold;
+  text-align: center;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+
+  /* animations */
+  -webkit-animation: fade_in_anim 1s;
+  -moz-animation: fade_in_anim 1s;
+  -ms-animation: fade_in_anim 1s;
+  animation: fade_in_anim 1s;
+}
+
+/* angular animation: hide it quickly */
+.loginerror.ng-hide {
+  opacity: 0;
+  -webkit-animation: 0s;
+  animation: 0s;
+}
+
+@-webkit-keyframes fade_in_anim {
+  from { opacity: 0;}
+  to { opacity:100; }
+}
+
+@keyframes fade_in_anim {
+  from { opacity: 0;}
+  to { opacity:100; }
+}
+
+.instructions {
+  width: 500px;
+  margin-right: auto;
+  margin-left: auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+.instructions > button {
+  display: block;
+  clear: both;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#wordpaircontainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1000px;
+  height: 300px;
+  text-align: center;
+}
+
+#wordpairs {
+  font-size: 72pt;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-weight: bold;
+  white-space: nowrap;
+  word-spacing: .5em;
+}
+
+.curword {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: #777777;
+}
+
+#progressbarcontainer {
+  text-align: center;
+  width: 100%;
+  height: 2.5em;
+  border: 1px solid #cccccc;
+  position: relative;
+  margin-top: 3em;
+}
+
+#progress {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+#progressfiller {
+  background: #9099f0;
+  width: 100%;
+  height: 100%;
+}
+#timeleft {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#testcontainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 300px;
+  text-align: center;
+  white-space: nowrap;
+}
+#firstword {
+  text-transform: uppercase;
+}
+
+#test {
+  font-size: 40pt;
+  word-spacing: .5em;
+}
+
+#test input[type=submit] {
+  font-size: 12pt;
+  vertical-align: middle;
+}
+
+
+#blank {
+  text-transform: uppercase;
+  width: 200px;
+}
+#wrong {
+  font-weight: bold;
+  font-family: impact;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: red;
+  -webkit-animation: wrong_anim 3s infinite alternate;
+  -moz-animation: wrong_anim 3s infinite alternate;
+  -ms-animation: wrong_anim 3s infinite alternate;
+  animation: wrong_anim 3s infinite alternate;
+}
+@-webkit-keyframes wrong_anim {
+  0% { 
+    font-size: 4vw;
+  }
+  50% { 
+    font-size: 50vw;
+  }
+  100% { 
+    font-size: 30vw;
+  }
+}
+
+@keyframes wrong_anim {
+  0% { 
+    font-size: 4vw;
+  }
+  50% { 
+    font-size: 50vw;
+  }
+  100% { 
+    font-size: 30vw;
+  }
+}
+
+#stupid {
+  font-weight: bold;
+  font-family: impact;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black;
+  -webkit-animation: stupid_anim 2s infinite;
+  animation: stupid_anim 2s infinite;
+  font-size: 5pt;
+  white-space: nowrap;
+}
+
+@-webkit-keyframes stupid_anim {
+  0% { 
+    top: 0;
+    transform: rotate(0deg);
+  }
+  60% {
+    top: 60%;
+    letter-spacing: 3vw;
+  }
+  100% {
+    top: 40%;
+    font-size: 100pt;
+    letter-spacing: .1em;
+  }
+}
+

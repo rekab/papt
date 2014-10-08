@@ -1,0 +1,11 @@
+<div id="testcontainer" ng-init="start()" ng-show="wordpairs">
+  <form id="test" ng-submit="submit()">
+    <label id="firstword" for="blank">{{wordpairs[curPair][0]}}</label>
+    <input id="blank" type="text" ng-model="input">
+    <input type="submit" value="Submit">
+  </form>
+  <div class="loginerror" ng-show="error">{{error}}</div>
+  <div class="curword">{{curPair+1}} of {{wordpairs.length}}</div>
+</div>
+<div id="wrong" ng-show="wrong">WRONG</div>
+<div id="stupid" ng-show="wrong">YOU ARE WRONG</div>

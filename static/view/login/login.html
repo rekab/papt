@@ -1,0 +1,7 @@
+<div id="login">
+  <form novalidate class="loginform" ng-submit="login()">
+    <label for="logininput">User ID:</label>
+    <input ng-model="userid" type="text" id="logininput">
+    <input type="submit" ng-click="login()" value="login">
+  <div class="loginerror" ng-show="error">{{error}}</div>
+</div>
