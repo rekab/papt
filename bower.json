@@ -11,6 +11,7 @@
     "angular-route": "1.2.x",
     "angular-loader": "1.2.x",
     "angular-mocks": "~1.2.x",
+    "angular-media-player": "0.5.x",
     "html5-boilerplate": "~4.3.0"
   }
 }

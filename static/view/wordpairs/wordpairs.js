@@ -12,8 +12,9 @@ angular.module('papt.wordpairs', ['ngRoute'])
 }])
 
 .controller('WordpairsCtrl', 
-    ['$scope', '$location', '$http', '$interval', '$window',
-    function($scope, $location, $http, $interval, $window) {
+    ['$scope', '$location', '$http', '$interval', '$window', '$timeout',
+    function($scope, $location, $http, $interval, $window, $timeout) {
+  $scope.spinner = true;
   $scope.start = function() {
     // Check if the user is logged in.
     // TODO: move this repeated code somewhere common. Possibly as a service?
@@ -38,6 +39,7 @@ angular.module('papt.wordpairs', ['ngRoute'])
       return;
     }
     $scope.wordpairs = response.data;
+    $scope.spinner = false;
     $scope.curPair = 0;
     startCountdown();
   }
@@ -68,14 +70,22 @@ angular.module('papt.wordpairs', ['ngRoute'])
     setTimeLeft();
     if ($scope.numTicksLeft == 0) {
       console.log('countdown over');
-      showNextWordPair();
+      transitionToNextWordPair();
       return;
     }
     var width = (100 * ($scope.numTicksLeft / $scope.maxNumTicks));
     $scope.progressbarStyle = {width: width + "%"};
   }
 
+  function transitionToNextWordPair() {
+    $scope.beep.playPause();
+    $scope.spinner = true;
+    // TODO: cancel the promise on navigation
+    $timeout(showNextWordPair, 1000);
+  }
+
   function showNextWordPair() {
+    $scope.spinner = false;
     if ($scope.curPair == $scope.wordpairs.length - 1) {
       console.log('out of word pairs, redirecting to /testinstructions');
       $location.path('/testinstructions');

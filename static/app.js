@@ -3,6 +3,7 @@
 // Declare app level module which depends on views, and components
 angular.module('papt', [
   'ngRoute',
+  'mediaPlayer',
   'papt.login',
   'papt.instructions',
   'papt.wordpairs',

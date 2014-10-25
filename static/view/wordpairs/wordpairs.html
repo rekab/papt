@@ -1,5 +1,16 @@
-<div id="loading" ng-hide="wordpairs">loading...</div>
-<div id="wordpaircontainer"  ng-show="wordpairs">
+<audio media-player="beep">
+  <source src="/sound/Electronic_Chime-KevanGC-495939803.mp3" type="audio/mp3">
+</audio>
+<div id="loading" ng-show="spinner">
+  <div class="spinner">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+  </div>
+</div>
+<div id="wordpaircontainer" ng-hide="spinner">
   <div id="wordpairs" ng-init="start()">
   {{wordpairs[curPair][0]}} {{wordpairs[curPair][1]}}
   </div>
