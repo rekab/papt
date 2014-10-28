@@ -1,9 +1,33 @@
 ## PAPT
 
-Paired Association Presentation and Testing
+Baker Paired Association Program (B-PAP).
 
-A Google App Engine app based on [AngularJS](http://angularjs.org/) and the
+The B-PAP is a word pair presentation and testing computer program, based on
+Google App Engine using [AngularJS](http://angularjs.org/) and the 
 [Flask micro framework](http://flask.pocoo.org).
+
+## Project Goals
+
+1. The B-PAP will be given an obscure URL that cannot be found during a web search.  
+
+2. The first screen will require the experimenter to enter the participant code.
+
+3. After entering the code, the experimenter will click either the "Initial
+Learning Phase [A, B, C, or D]," "Test 1," or "Test 2" buttons.  
+
+4. The Initial Learning Phases will present participants with the four sets of
+11 word pairs.  Each word pair will be presented at 1-minute intervals to allow
+adequate time to create an image.  A 500-millisecond lapse will occur between
+each word pair similar to the study by Coane (2013).  Word pairs will be
+displayed in 72-point Helvetica font, and the first word will have a colon
+after it (e.g., SWEET : FISH).  A display bar will indicate how much time is
+remaining for each item, and a tone will sound after one minute has passed,
+alerting participants to the next question.  
+
+5. Test 1 will test participants on 22 word pairs (11 word pairs from the DM
+condition and 11 from the NT condition) by displaying a word and an adjacent
+text box where participants will type the associated word.  Test 2 will test
+participants on the remaining word pairs. 
 
 
 ## Run Locally
