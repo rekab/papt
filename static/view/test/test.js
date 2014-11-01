@@ -9,16 +9,31 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
   });
 }])
 
-.controller('TestCtrl', ['userService', '$scope', '$location', '$http', function(userService, $scope, $location, $http) {
+.factory('testService', ['$location', function($location) {
+  var flavor;
+  return {
+    setFlavor: function(desiredFlavor) { flavor = desiredFlavor; },
+    getFlavor: function() { return flavor; },
+    goToTest: function(flavor) {
+      console.log('Setting test flavor to ' + flavor + ' and redirecting to /test');
+      this.setFlavor(flavor);
+      $location.path('/test');
+    }
+  };
+}])
+
+.controller('TestCtrl', ['userService', 'testService', '$scope', '$location', '$http', function(userService, testService, $scope, $location, $http) {
   $scope.start = function() {
-    console.log('got here');
-    userService.checkLoggedIn();
-    // Load the wordpairs.
-    // TODO: test should be a different set of data?
-    $http.get('/data/wordpairs.json').then(loadWordPairs)
+    if (!userService.checkLoggedIn()) {
+      return;
+    }
+    // Load the test.
+    var jsonPath = '/data/test-' + testService.getFlavor() + '.json';
+    $http.get(jsonPath).then(loadTest, function() { alert('Failed to load test data :('); });
+    //$http.get(jsonPath).then(loadTest);
   };
 
-  function loadWordPairs(response) {
+  function loadTest(response) {
     console.log('response.data='+response.data);
     $scope.numPairs = response.data.length;
     if ($scope.numPairs < 1) {
@@ -41,8 +56,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
     $scope.wrong = true;
     $scope.curPair++;
     if ($scope.curPair >= $scope.wordpairs.length) {
-      // loop
-      $scope.curPair = 0;
+      $location.path('/home');
     }
   };
 }]);
