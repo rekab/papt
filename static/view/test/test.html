@@ -1,7 +1,7 @@
 <div id="testcontainer" ng-init="start()" ng-show="wordpairs">
   <form id="test" ng-submit="submit()">
     <label id="firstword" for="blank">{{wordpairs[curPair][0]}}</label>
-    <input id="blank" type="text" ng-model="input">
+    <input id="blank" type="text" ng-model="input" autofocus>
     <input type="submit" value="Submit">
   </form>
   <div class="loginerror" ng-show="error">{{error}}</div>

@@ -30,7 +30,6 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
     // Load the test.
     var jsonPath = '/data/test-' + testService.getFlavor() + '.json';
     $http.get(jsonPath).then(loadTest, function() { alert('Failed to load test data :('); });
-    //$http.get(jsonPath).then(loadTest);
   };
 
   function loadTest(response) {
