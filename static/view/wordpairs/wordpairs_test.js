@@ -9,7 +9,7 @@ describe('papt.wordpairs module', function() {
   beforeEach(module('papt.wordpairs'));
 
   describe('wordpairs controller', function() {
-    var mockScope, mockLocation, mockHttp, mockInterval, mockTimeout, fakeUserService;
+    var mockScope, mockLocation, mockHttp, mockInterval, mockTimeout, mockUserService, fakeWordpairService;
     var wordpairDataHandler;
 
     beforeEach(inject(function($rootScope, $location, $httpBackend, $interval, $timeout, $controller) {
@@ -18,8 +18,12 @@ describe('papt.wordpairs module', function() {
       mockInterval = $interval;
       mockTimeout = $timeout;
       mockHttp = $httpBackend;
-      fakeUserService = {
-        checkLoggedIn: function() { this.called = true; }
+      mockUserService = {
+        checkLoggedIn: function() { this.called = true; return true; }
+      };
+      fakeWordpairService = {
+        // Should always fetch "wordpairs-a.json".
+        getFlavor: function() { return 'a'; }
       };
 
       mockScope.beep = {
@@ -33,9 +37,10 @@ describe('papt.wordpairs module', function() {
           $location: mockLocation,
           $interval: mockInterval,
           $timeout: mockTimeout,
-          userService: fakeUserService
+          userService: mockUserService,
+          wordpairService: fakeWordpairService
         });
-      wordpairDataHandler = mockHttp.when('GET', '/data/wordpairs.json')
+      wordpairDataHandler = mockHttp.when('GET', '/data/wordpairs-a.json')
         .respond([["foo", "bar"], ["qux", "baz"]]);
     }));
 
@@ -45,10 +50,10 @@ describe('papt.wordpairs module', function() {
     });
 
     it('should load word pairs and start the countdown', inject(function() {
-      expect(fakeUserService.called).not.toBeTruthy();
+      expect(mockUserService.called).not.toBeTruthy();
       mockScope.start();
       mockHttp.flush();
-      expect(fakeUserService.called).toBeTruthy();
+      expect(mockUserService.called).toBeTruthy();
       expect(mockLocation.path()).not.toBe('/login');
       expect(mockScope.wordpairs).toBeDefined();
       expect(mockScope.wordpairs[0][0]).toBe('foo')

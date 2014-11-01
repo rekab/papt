@@ -16,23 +16,30 @@ angular.module('papt.wordpairs', ['ngRoute', 'papt.userservice'])
   return {
     setFlavor: function(desiredFlavor) { flavor = desiredFlavor; },
     getFlavor: function() { return flavor; },
-    goToWordpairPresentation: function() {
+    goToWordpairPresentation: function(flavor) {
+      console.log('Setting wordpair flavor to ' + flavor + ' and redirecting to /wordpairs');
+      this.setFlavor(flavor);
       $location.path('/wordpairs');
     }
   };
 }])
 
 .controller('WordpairsCtrl', 
-    ['userService', '$scope', '$location', '$http', '$interval', '$window', '$timeout',
-    function(userService, $scope, $location, $http, $interval, $window, $timeout) {
+    ['userService', 'wordpairService', '$scope', '$location', '$http', '$interval', '$window', '$timeout',
+    function(userService, wordpairService, $scope, $location, $http, $interval, $window, $timeout) {
   $scope.spinner = true;
   $scope.start = function() {
-    userService.checkLoggedIn();
+    if (!userService.checkLoggedIn()) {
+      console.log('not logged in, returning');
+      return;
+    }
     // Load the wordpairs.
-    $http.get('/data/wordpairs.json').then(loadWordPairs)
-    /*.error(function() {
-      // TODO: user visible error
-    })*/;
+    var jsonPath = '/data/wordpairs-' + wordpairService.getFlavor() + '.json';
+    console.log('Fetching: ' + jsonPath);
+    $http.get(jsonPath).then(loadWordPairs,
+      function() {
+        alert('Failed to load word pair data :(');
+    });
   };
 
   function loadWordPairs(response) {
