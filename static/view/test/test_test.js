@@ -1,34 +1,29 @@
 'use strict';
 
-describe('papt.instructions module', function() {
+describe('papt.test module', function() {
 
-  beforeEach(module('papt.instructions'));
+  beforeEach(module('papt.test'));
 
   describe('instructions controller', function() {
-    var mockScope, mockLocation;
+    var mockScope, mockLocation, mockHttp, fakeUserService;
 
-    beforeEach(inject(function($rootScope, $location, $controller) {
+    beforeEach(inject(function($rootScope, $location, $controller, $httpBackend) {
       mockScope = $rootScope.$new();
       mockLocation = $location;
+      mockHttp = $httpBackend;
       var controller = $controller(
-        'InstructionsCtrl',
+        'TestCtrl',
         { 
+          userService: fakeUserService,
           $scope: mockScope,
-          $location: mockLocation
+          $location: mockLocation,
+          $http: $httpBackend
         });
     }));
 
     it('should redirect when no user', inject(function() {
-      mockScope.checkLoggedIn();
-      expect(mockLocation.path()).toBe('/login');
-    }));
-
-    it('should proceed on proceed()', inject(function() {
-      mockScope.userid = "foo";
-      mockScope.checkLoggedIn();
-      expect(mockLocation.path()).not.toBe('/login');
-      mockScope.proceed();
-      expect(mockLocation.path()).toBe('/wordpairs');
+      //mockScope.start();
+      //expect(mockLocation.path()).toBe('/login');
     }));
   });
 });

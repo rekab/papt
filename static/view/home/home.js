@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('papt.home', ['ngRoute', 'papt.wordpairs'])
+angular.module('papt.home', ['ngRoute', 'papt.userservice', 'papt.wordpairs'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/home', {
@@ -9,15 +9,8 @@ angular.module('papt.home', ['ngRoute', 'papt.wordpairs'])
   });
 }])
 
-.controller('HomeCtrl', ['$scope', '$location', 'wordpairService', function($scope, $location, wordpairService) {
-  $scope.checkLoggedIn = function() {
-    console.log('checking logged in')
-    if (!$scope.userid) {
-      console.log("Not logged in");
-      $location.path('/login');
-      return;
-    }
-  };
+.controller('HomeCtrl', ['$scope', '$location', 'userService', 'wordpairService', function($scope, $location, userService, wordpairService) {
+  $scope.checkLoggedIn = userService.checkLoggedIn;
   $scope.showWordPairs = function(flavor) {
     wordpairService.setFlavor(flavor);
     $location.path('/wordpairs');

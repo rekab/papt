@@ -10,6 +10,7 @@ angular.module('papt', [
   'papt.wordpairs',
   'papt.testinstructions',
   'papt.test',
+  'papt.userservice'
 ]).
 config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/login'});

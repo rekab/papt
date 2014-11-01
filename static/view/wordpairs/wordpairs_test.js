@@ -1,11 +1,15 @@
 'use strict';
 
+// Mock out papt.userservice.
+angular.module('papt.userservice', []);
+
 describe('papt.wordpairs module', function() {
 
+  beforeEach(module('papt.userservice')); // Loads our flavor crystals.
   beforeEach(module('papt.wordpairs'));
 
   describe('wordpairs controller', function() {
-    var mockScope, mockLocation, mockHttp, mockInterval, mockTimeout;
+    var mockScope, mockLocation, mockHttp, mockInterval, mockTimeout, fakeUserService;
     var wordpairDataHandler;
 
     beforeEach(inject(function($rootScope, $location, $httpBackend, $interval, $timeout, $controller) {
@@ -14,10 +18,13 @@ describe('papt.wordpairs module', function() {
       mockInterval = $interval;
       mockTimeout = $timeout;
       mockHttp = $httpBackend;
+      fakeUserService = {
+        checkLoggedIn: function() { this.called = true; }
+      };
 
       mockScope.beep = {
         playPause: function() { this.played = true; }
-      }
+      };
 
       var controller = $controller(
         'WordpairsCtrl',
@@ -25,7 +32,8 @@ describe('papt.wordpairs module', function() {
           $scope: mockScope,
           $location: mockLocation,
           $interval: mockInterval,
-          $timeout: mockTimeout
+          $timeout: mockTimeout,
+          userService: fakeUserService
         });
       wordpairDataHandler = mockHttp.when('GET', '/data/wordpairs.json')
         .respond([["foo", "bar"], ["qux", "baz"]]);
@@ -36,15 +44,11 @@ describe('papt.wordpairs module', function() {
       mockHttp.verifyNoOutstandingRequest();
     });
 
-    it('should redirect when no user', inject(function() {
-      mockScope.start();
-      expect(mockLocation.path()).toBe('/login');
-    }));
-
     it('should load word pairs and start the countdown', inject(function() {
-      mockScope.userid = "foo";
+      expect(fakeUserService.called).not.toBeTruthy();
       mockScope.start();
       mockHttp.flush();
+      expect(fakeUserService.called).toBeTruthy();
       expect(mockLocation.path()).not.toBe('/login');
       expect(mockScope.wordpairs).toBeDefined();
       expect(mockScope.wordpairs[0][0]).toBe('foo')
@@ -75,7 +79,7 @@ describe('papt.wordpairs module', function() {
       expect(mockScope.beep.played).toBeTruthy();
       // Skip ahead some more time for the sound to play.
       mockTimeout.flush(1000);
-      expect(mockLocation.path()).toBe('/testinstructions');
+      expect(mockLocation.path()).toBe('/home');
     }));
   });
 });

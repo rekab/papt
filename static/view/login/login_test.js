@@ -1,22 +1,28 @@
 'use strict';
 
+// Mock out papt.userservice.
+angular.module('papt.userservice', []);
+
 describe('papt.login module', function() {
 
+  beforeEach(module('papt.userservice')); // Loads our flavor crystals.
   beforeEach(module('papt.login'));
 
   describe('login controller', function() {
-    var mockRootScope, mockScope, mockLocation;
+    var mockScope, mockLocation, mockUserService;
 
     beforeEach(inject(function($rootScope, $location, $controller) {
-      mockRootScope = $rootScope.$new();
       mockScope = $rootScope.$new();
       mockLocation = $location;
+      mockUserService = {
+        setUser: function(user) { this.user = user; }
+      };
       var controller = $controller(
         'LoginCtrl',
         { 
-          $rootScope: mockRootScope,
           $scope: mockScope,
-          $location: mockLocation
+          $location: mockLocation,
+          userService: mockUserService
         });
     }));
 
@@ -26,11 +32,11 @@ describe('papt.login module', function() {
     }));
 
     it('should succeed when there is a user', inject(function() {
-      mockScope.userid = "foo"
+      mockScope.userid = "foo";
       mockScope.login();
       expect(mockScope.error).not.toBeTruthy();
-      expect(mockLocation.path()).toBe('/instructions');
-      expect(mockRootScope.userid).toBe("foo");
+      expect(mockUserService.user).toBe("foo");
+      expect(mockLocation.path()).toBe('/home');
     }));
 
   });

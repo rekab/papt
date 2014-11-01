@@ -2,7 +2,7 @@
 
 var WORDPAIR_DURATION_SECS = 3;
 
-angular.module('papt.wordpairs', ['ngRoute'])
+angular.module('papt.wordpairs', ['ngRoute', 'papt.userservice'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/wordpairs', {
@@ -11,26 +11,23 @@ angular.module('papt.wordpairs', ['ngRoute'])
   });
 }])
 
-.factory('wordpairService', function() {
+.factory('wordpairService', ['$location', function($location) {
   var flavor;
   return {
     setFlavor: function(desiredFlavor) { flavor = desiredFlavor; },
-    getFlavor: function() { return flavor; }
+    getFlavor: function() { return flavor; },
+    goToWordpairPresentation: function() {
+      $location.path('/wordpairs');
+    }
   };
-})
+}])
 
 .controller('WordpairsCtrl', 
-    ['$scope', '$location', '$http', '$interval', '$window', '$timeout',
-    function($scope, $location, $http, $interval, $window, $timeout) {
+    ['userService', '$scope', '$location', '$http', '$interval', '$window', '$timeout',
+    function(userService, $scope, $location, $http, $interval, $window, $timeout) {
   $scope.spinner = true;
   $scope.start = function() {
-    // Check if the user is logged in.
-    // TODO: move this repeated code somewhere common. Possibly as a service?
-    if (!$scope.userid) {
-      console.log("Not logged in");
-      $location.path('/login');
-      return;
-    }
+    userService.checkLoggedIn();
     // Load the wordpairs.
     $http.get('/data/wordpairs.json').then(loadWordPairs)
     /*.error(function() {
@@ -95,13 +92,11 @@ angular.module('papt.wordpairs', ['ngRoute'])
   function showNextWordPair() {
     $scope.spinner = false;
     if ($scope.curPair == $scope.wordpairs.length - 1) {
-      console.log('out of word pairs, redirecting to /testinstructions');
-      $location.path('/testinstructions');
+      console.log('out of word pairs, redirecting to /home');
+      $location.path('/home');
       return;
     }
     $scope.curPair++;
     startCountdown();
   }
 }]);
-
-

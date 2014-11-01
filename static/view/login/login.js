@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('papt.login', ['ngRoute'])
+angular.module('papt.login', ['ngRoute', 'papt.userservice'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/login', {
@@ -9,15 +9,16 @@ angular.module('papt.login', ['ngRoute'])
   });
 }])
 
-.controller('LoginCtrl', ['$rootScope', '$scope', '$location',
-    function($rootScope, $scope, $location) {
+.controller('LoginCtrl', ['$scope', '$location', 'userService',
+    function($scope, $location, userService) {
   $scope.login = function() {
     if (!$scope.userid) {
       $scope.error = "Please enter a user ID.";
       return;
     }
     $scope.error = "";
-    $rootScope.userid = $scope.userid;
+    userService.setUser($scope.userid);
     $location.path('/home');
   }
-}]);
+}])
+

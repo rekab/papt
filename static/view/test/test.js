@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('papt.test', ['ngRoute'])
+angular.module('papt.test', ['ngRoute', 'papt.userservice'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/test', {
@@ -9,13 +9,10 @@ angular.module('papt.test', ['ngRoute'])
   });
 }])
 
-.controller('TestCtrl', ['$scope', '$location', '$http', function($scope, $location, $http) {
+.controller('TestCtrl', ['userService', '$scope', '$location', '$http', function(userService, $scope, $location, $http) {
   $scope.start = function() {
-    if (!$scope.userid) {
-      console.log("Not logged in");
-      //$location.path('/login');
-      //return;
-    }
+    console.log('got here');
+    userService.checkLoggedIn();
     // Load the wordpairs.
     // TODO: test should be a different set of data?
     $http.get('/data/wordpairs.json').then(loadWordPairs)
