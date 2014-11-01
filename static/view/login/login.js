@@ -18,6 +18,6 @@ angular.module('papt.login', ['ngRoute'])
     }
     $scope.error = "";
     $rootScope.userid = $scope.userid;
-    $location.path('/instructions');
+    $location.path('/home');
   }
 }]);

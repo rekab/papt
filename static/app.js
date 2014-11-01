@@ -5,6 +5,7 @@ angular.module('papt', [
   'ngRoute',
   'mediaPlayer',
   'papt.login',
+  'papt.home',
   'papt.instructions',
   'papt.wordpairs',
   'papt.testinstructions',

@@ -11,6 +11,14 @@ angular.module('papt.wordpairs', ['ngRoute'])
   });
 }])
 
+.factory('wordpairService', function() {
+  var flavor;
+  return {
+    setFlavor: function(desiredFlavor) { flavor = desiredFlavor; },
+    getFlavor: function() { return flavor; }
+  };
+})
+
 .controller('WordpairsCtrl', 
     ['$scope', '$location', '$http', '$interval', '$window', '$timeout',
     function($scope, $location, $http, $interval, $window, $timeout) {
