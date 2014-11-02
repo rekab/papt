@@ -97,12 +97,12 @@ angular.module('papt.wordpairs', ['ngRoute', 'papt.userservice'])
   }
 
   function showNextWordPair() {
-    $scope.spinner = false;
     if ($scope.curPair == $scope.wordpairs.length - 1) {
       console.log('out of word pairs, redirecting to /done');
       $location.path('/done');
       return;
     }
+    $scope.spinner = false;
     $scope.curPair++;
     startCountdown();
   }
