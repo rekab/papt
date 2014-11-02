@@ -118,8 +118,11 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
   height: 300px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
   text-align: center;
 }
 
@@ -141,7 +144,9 @@ body {
 
 #progressbarcontainer {
   text-align: center;
-  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
   height: 2.5em;
   border: 1px solid #cccccc;
   position: relative;
