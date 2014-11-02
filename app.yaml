@@ -5,8 +5,22 @@ api_version: 1
 threadsafe: yes
 skip_files:
 - .*node_modules/.*
+- .*pyc$
 
 handlers:
+- url: /$
+  static_files: static/index.html
+  upload: static/index.html
+  expiration: "15m"
+
+- url: /
+  static_dir: static/
+  expiration: "15m"
+
+- url: /sound
+  static_dir: static/sound
+  expiration: "7d"
+
 - url: .*
   script: main.app
 

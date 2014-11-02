@@ -128,7 +128,6 @@ body {
 
 #wordpairs {
   font-size: 72pt;
-  font-weight: bold;
   text-transform: uppercase;
   font-weight: bold;
   white-space: nowrap;
@@ -295,8 +294,8 @@ body {
 }
 
 .menulabel {
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
+  /*font-weight: bold;*/
   font-style: italic;
-  font-weight: bold;
   border-bottom: 1px solid #cccccc;
 }

@@ -4,6 +4,7 @@ app.config['DEBUG'] = True
 
 @app.route('/')
 def root():
+  # Note: this is probably handled by the app engine static file handler.
   return app.send_static_file('index.html')
 
 @app.errorhandler(404)
