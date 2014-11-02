@@ -6,9 +6,8 @@ angular.module('papt', [
   'mediaPlayer',
   'papt.login',
   'papt.home',
-  'papt.instructions',
   'papt.wordpairs',
-  'papt.testinstructions',
+  'papt.done',
   'papt.test',
   'papt.userservice'
 ]).

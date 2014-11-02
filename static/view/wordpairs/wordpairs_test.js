@@ -84,7 +84,7 @@ describe('papt.wordpairs module', function() {
       expect(mockScope.beep.played).toBeTruthy();
       // Skip ahead some more time for the sound to play.
       mockTimeout.flush(1000);
-      expect(mockLocation.path()).toBe('/home');
+      expect(mockLocation.path()).toBe('/done');
     }));
   });
 });
