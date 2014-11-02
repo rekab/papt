@@ -59,11 +59,11 @@ describe('papt.wordpairs module', function() {
       expect(mockScope.wordpairs[0][0]).toBe('foo')
       expect(mockScope.numPairs).toBe(2);
       expect(mockScope.curPair).toBe(0);
-      expect(mockScope.numTicksLeft).toBe(300)
+      expect(mockScope.numTicksLeft).toBe(3000)
 
       // Time moves forward, expect the tick.
       mockInterval.flush(10);
-      expect(mockScope.numTicksLeft).toBe(299)
+      expect(mockScope.numTicksLeft).toBe(2999)
 
       // Skip ahead to the last tick and send time forward.
       mockScope.numTicksLeft = 1
@@ -71,7 +71,7 @@ describe('papt.wordpairs module', function() {
       // Expect the beep to have been played.
       expect(mockScope.beep.played).toBeTruthy();
       // Skip ahead some more time for the sound to play.
-      mockTimeout.flush(1000);
+      mockTimeout.flush(10000);
       expect(mockScope.curPair).toBe(1);
 
       // Reset the mock sound.

@@ -1,6 +1,6 @@
 'use strict';
 
-var WORDPAIR_DURATION_SECS = 3;
+var WORDPAIR_DURATION_SECS = 30;
 
 angular.module('papt.wordpairs', ['ngRoute', 'papt.userservice'])
 
