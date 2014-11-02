@@ -1,10 +1,25 @@
 <div id="home" ng-init="checkLoggedIn()">
-  <button ng-click="showWordPairs('note')">Note Taking Trial</button>
-  <button ng-click="showWordPairs('drawing')">Drawing Trial</button>
-  <button ng-click="showWordPairs('a')">Initial Learning Phase A</button>
-  <button ng-click="showWordPairs('b')">Initial Learning Phase B</button>
-  <button ng-click="showWordPairs('c')">Initial Learning Phase C</button>
-  <button ng-click="showWordPairs('d')">Initial Learning Phase D</button>
-  <button ng-click="startTest('1')">Test 1</button>
-  <button ng-click="startTest('2')">Test 2</button>
+  <div class="homemenu">
+    <div class="menulabel">
+      Demo
+    </div>
+    <button ng-click="showWordPairs('note')">Note Taking Trial</button>
+    <button ng-click="showWordPairs('drawing')">Drawing Trial</button>
+  </div>
+  <div class="homemenu">
+    <div class="menulabel">
+      Learn
+    </div>
+    <button ng-click="showWordPairs('a')">Initial Learning Phase A</button>
+    <button ng-click="showWordPairs('b')">Initial Learning Phase B</button>
+    <button ng-click="showWordPairs('c')">Initial Learning Phase C</button>
+    <button ng-click="showWordPairs('d')">Initial Learning Phase D</button>
+  </div>
+  <div class="homemenu">
+    <div class="menulabel">
+      Test
+    </div>
+    <button ng-click="startTest('1')">Test 1</button>
+    <button ng-click="startTest('2')">Test 2</button>
+  </div>
 </div>

@@ -50,6 +50,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
       $scope.error = "Please enter a word.";
       return;
     }
+    // TODO: send the input to the server.
     $scope.error = "";
     $scope.input = ""
     $scope.wrong = true;

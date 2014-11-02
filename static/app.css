@@ -30,7 +30,8 @@ body {
 }
 
 #login {
-  background: #dddddd;
+  background: #efefef;
+  box-shadow: 2px 2px 5px 2px #888888;
   padding: 20px;
   position: absolute;
   width: 350px;
@@ -262,3 +263,35 @@ body {
   }
 }
 
+#home {
+  background: #efefef;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  box-shadow: 2px 2px 5px 2px #888888;
+  vertical-align: middle;
+  padding: 20px;
+}
+
+.homemenu {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+}
+.homemenu button {
+  margin: 5px;
+  white-space: nowrap;
+}
+
+.menulabel {
+  text-transform: uppercase;
+  font-style: italic;
+  font-weight: bold;
+  border-bottom: 1px solid #cccccc;
+}
