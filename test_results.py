@@ -17,10 +17,16 @@ class UserTestCase(unittest.TestCase):
   def tearDown(self):
     self.testbed.deactivate()
 
+  def testUserWithInvalidGroup(self):
+    self.assertRaises(TypeError, results.User, name='foo')
+
   def testUser(self):
-    user = results.User(name='foo')
+    user = results.User(name=results.UserName('foo-1'))
     key = user.put()
-    self.assertEqual(1, len(results.User.query(results.User.name == 'foo').fetch()))
+    fetched = results.User.query(
+        results.User.name == results.UserName('foo-1')).fetch()
+    self.assertEqual(1, len(fetched))
+    self.assertEqual('1', fetched[0].group)
 
 
 if __name__ == '__main__':
