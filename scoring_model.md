@@ -60,3 +60,8 @@ Their scores by category would be different:
 |dm-imm   | 1     |
 |dm-del   | 1     |
 
+### Data location
+
+`static/data/wordpair-categories.json` contains a dictionary of all test
+answers, mapping to a 2-element list of categories, for group 1 and group 2,
+respectively.
