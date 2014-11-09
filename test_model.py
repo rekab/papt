@@ -2,7 +2,7 @@ import unittest
 from google.appengine.ext import db
 from google.appengine.ext import testbed
 
-import results
+import model
 
 class UserTestCase(unittest.TestCase):
   def setUp(self):
@@ -18,13 +18,16 @@ class UserTestCase(unittest.TestCase):
     self.testbed.deactivate()
 
   def testUserWithInvalidGroup(self):
-    self.assertRaises(TypeError, results.User, name='foo')
+    self.assertRaises(ValueError, model.UserName, 'foo')
+
+  def testUserWithWrongType(self):
+    self.assertRaises(TypeError, model.User, name='foo')
 
   def testUser(self):
-    user = results.User(name=results.UserName('foo-1'))
+    user = model.User(name=model.UserName('foo-1'))
     key = user.put()
-    fetched = results.User.query(
-        results.User.name == results.UserName('foo-1')).fetch()
+    fetched = model.User.query(
+        model.User.name == model.UserName('foo-1')).fetch()
     self.assertEqual(1, len(fetched))
     self.assertEqual('1', fetched[0].group)
 

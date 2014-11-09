@@ -26,7 +26,7 @@ class UserName(object):
     self.name = name
     m = USER_NAME_RE.match(name)
     if not m:
-      raise IllegalArgumentException('Invalid user name: %s' % name)
+      raise ValueError('Invalid user name: %s' % name)
     self.group = m.group(1)
 
 
