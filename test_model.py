@@ -31,12 +31,15 @@ class UserTestCase(BaseTest):
     self.assertRaises(TypeError, model.User, name='foo')
 
   def testUser(self):
-    user = model.User(name=model.UserName('foo-1'))
+    user = model.User(name=model.UserName('foo-1'),
+        csrf_token=model.UserCSRFToken(token='asdf'))
     key = user.put()
     fetched = model.User.query(
         model.User.name == model.UserName('foo-1')).fetch()
     self.assertEqual(1, len(fetched))
     self.assertEqual('1', fetched[0].group)
+    self.assertTrue(user.csrf_token.IsValid('asdf'))
+    self.assertFalse(user.csrf_token.IsValid('nope'))
 
 
 class TestResultTestCase(BaseTest):
