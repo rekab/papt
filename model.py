@@ -5,7 +5,7 @@ import re
 
 from google.appengine.ext import ndb
 
-USER_NAME_RE = re.compile(r'^[\w\d\-]+-(\d+)$')
+USER_NAME_RE = re.compile(r'^[\w\d\-]+-([12])$')
 
 
 class WordCategorizer(object):
@@ -89,7 +89,7 @@ class TestAnswer(ndb.Model):
   time_answered = ndb.DateTimeProperty(auto_now_add=True)
   expected = ndb.StringProperty()
   got = ndb.StringProperty()
-  correct = ndb.BooleanProperty()
+  correct = ndb.ComputedProperty(lambda self: self.got == self.expected)
   category = ndb.ComputedProperty(
       # Lookup the category of the word based on the user's group.
       lambda self: WordCategorizer.CategorizeWord(
