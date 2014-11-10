@@ -1,4 +1,5 @@
 """Models of results for storage in NDB."""
+import datetime
 import json
 import os
 import re
@@ -58,6 +59,15 @@ class UserNameProperty(ndb.StringProperty):
     return UserName(value)
 
 
+class UserCSRFToken(ndb.Model):
+  time_created = ndb.DateTimeProperty(auto_now_add=True)
+  token = ndb.StringProperty()
+
+  def IsValid(self, client_token):
+    return client_token == self.token and (
+        datetime.datetime.now() - self.time_created).days <= 1
+
+
 class User(ndb.Model):
   """A user and their results."""
   name = UserNameProperty()
@@ -65,6 +75,7 @@ class User(ndb.Model):
   time_created = ndb.DateTimeProperty(auto_now_add=True)
   notetaking_time = ndb.DateTimeProperty()
   drawing_time = ndb.DateTimeProperty()
+  csrf_token = ndb.StructuredProperty(UserCSRFToken)
 
 
 class TestAnswer(ndb.Model):
