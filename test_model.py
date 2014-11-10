@@ -1,24 +1,7 @@
-import unittest
-from google.appengine.ext import db
-from google.appengine.ext import testbed
-
+import base_test
 import model
 
-class BaseTest(unittest.TestCase):
-  def setUp(self):
-    # First, create an instance of the Testbed class.
-    self.testbed = testbed.Testbed()
-    # Then activate the testbed, which prepares the service stubs for use.
-    self.testbed.activate()
-    # Next, declare which service stubs you want to use.
-    self.testbed.init_datastore_v3_stub()
-    self.testbed.init_memcache_stub()
-
-  def tearDown(self):
-    self.testbed.deactivate()
-
-
-class UserTestCase(BaseTest):
+class UserTestCase(base_test.BaseTest):
   def testUserWithInvalidGroup(self):
     self.assertRaises(ValueError, model.UserName, 'foo')
     self.assertRaises(ValueError, model.UserName, 'foo-12')
@@ -42,7 +25,7 @@ class UserTestCase(BaseTest):
     self.assertFalse(user.csrf_token.IsValid('nope'))
 
 
-class TestResultTestCase(BaseTest):
+class TestResultTestCase(base_test.BaseTest):
 
   def testGroup1Answers(self):
     user1 = model.User(name=model.UserName('user-1'))

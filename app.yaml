@@ -13,6 +13,9 @@ handlers:
   upload: static/index.html
   expiration: "15m"
 
+- url: /user/.*
+  script: user_actions.app
+
 - url: /
   static_dir: static/
   expiration: "15m"
@@ -21,6 +24,7 @@ handlers:
 - url: /sound
   static_dir: static/sound
   expiration: "7d"
+
 
 - url: .*
   script: main.app
