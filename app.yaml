@@ -16,6 +16,7 @@ handlers:
 - url: /
   static_dir: static/
   expiration: "15m"
+  application_readable: true
 
 - url: /sound
   static_dir: static/sound

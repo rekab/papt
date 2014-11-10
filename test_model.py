@@ -4,7 +4,7 @@ from google.appengine.ext import testbed
 
 import model
 
-class UserTestCase(unittest.TestCase):
+class BaseTest(unittest.TestCase):
   def setUp(self):
     # First, create an instance of the Testbed class.
     self.testbed = testbed.Testbed()
@@ -17,6 +17,8 @@ class UserTestCase(unittest.TestCase):
   def tearDown(self):
     self.testbed.deactivate()
 
+
+class UserTestCase(BaseTest):
   def testUserWithInvalidGroup(self):
     self.assertRaises(ValueError, model.UserName, 'foo')
 
@@ -30,6 +32,16 @@ class UserTestCase(unittest.TestCase):
         model.User.name == model.UserName('foo-1')).fetch()
     self.assertEqual(1, len(fetched))
     self.assertEqual('1', fetched[0].group)
+
+
+class TestResultTestCase(BaseTest):
+  def testUserWithOneAnswer(self):
+    user = model.User(name=model.UserName('foo-1'))
+    user_key = user.put()
+    answer = model.TestAnswer(user=user_key, expected='pair', correct=True)
+    result = model.TestResult(parent=user_key, answers=[answer])
+    result.put()
+    self.assertEqual('dm-imm', result.answers[0].category)
 
 
 if __name__ == '__main__':
