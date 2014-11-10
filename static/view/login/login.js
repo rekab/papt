@@ -16,9 +16,7 @@ angular.module('papt.login', ['ngRoute', 'papt.userservice'])
       $scope.error = "Please enter a user ID.";
       return;
     }
-    var loginUrl = '/user/login/' + $scope.userid;
-    console.log('Logging in at: ' + loginUrl);
-    $http.get(loginUrl).then(function(response) {
+    $http.post('/user/login', {username: $scope.userid}).then(function(response) {
       console.log('Successfully logged in')
       $scope.error = "";
       userService.setUser($scope.userid, response.data.csrf_token);

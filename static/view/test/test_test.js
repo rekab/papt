@@ -20,8 +20,7 @@ describe('papt.test module', function() {
           userService: fakeUserService,
           testService: mockTestService,
           $scope: mockScope,
-          $location: mockLocation,
-          $http: $httpBackend
+          $location: mockLocation
         });
     }));
 

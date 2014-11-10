@@ -42,7 +42,7 @@ describe('papt.login module', function() {
 
     it('should succeed when there is a user', inject(function() {
       mockScope.userid = "foo";
-      mockHttp.expectGET("/user/login/foo").respond({
+      mockHttp.expectPOST("/user/login", {username: "foo"}).respond({
           "csrf_token": "some_string", 
           "error": null
       });
@@ -59,7 +59,7 @@ describe('papt.login module', function() {
 
     it('should handle an angry server response', inject(function() {
       mockScope.userid = "foo";
-      mockHttp.expectGET("/user/login/foo").respond(401, {
+      mockHttp.expectPOST("/user/login", {username: "foo"}).respond(401, {
           "error": "say what"
       });
 

@@ -17,6 +17,9 @@ handlers:
 - url: /user/.*
   script: user_actions.app
 
+- url: /test/.*
+  script: test_actions.app
+
 - url: /
   static_dir: static/
   expiration: "15m"

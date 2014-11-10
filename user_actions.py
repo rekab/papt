@@ -5,6 +5,7 @@ import random
 import string
 from flask import Flask
 from flask import jsonify
+from flask import request
 
 import model
 
@@ -19,8 +20,16 @@ def page_not_found(e):
     return 'Sorry, nothing at this URL.', 404
 
 
-@app.route('/user/login/<username>')
-def login(username):
+@app.route('/user/login', methods=['POST'])
+def login():
+  posted_json = request.get_json()
+  if not posted_json or 'username' not in posted_json:
+    logging.error('bad json post: %s', posted_json)
+    error = jsonify(error='Application error, client sent bad data')
+    error.status_code = 400
+    return error
+
+  username = posted_json['username']
   user = None
   try:
     user = model.User.get_by_id(username)
