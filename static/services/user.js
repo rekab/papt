@@ -3,9 +3,12 @@
 angular.module('papt.userservice', ['ngRoute'])
 
 .factory('userService', ['$location', function($location) {
-  var user;
+  var user, csrfToken;
   return {
-    setUser: function(setTo) { user = setTo; },
+    setUser: function(newUser, newToken) { 
+      user = newUser; 
+      csrfToken = newToken;
+    },
     getUser: function() { return user; },
     checkLoggedIn: function() {
       console.log('checking logged in')

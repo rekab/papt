@@ -9,16 +9,24 @@ angular.module('papt.login', ['ngRoute', 'papt.userservice'])
   });
 }])
 
-.controller('LoginCtrl', ['$scope', '$location', 'userService',
-    function($scope, $location, userService) {
+.controller('LoginCtrl', ['$scope', '$location', '$http', 'userService',
+    function($scope, $location, $http, userService) {
   $scope.login = function() {
     if (!$scope.userid) {
       $scope.error = "Please enter a user ID.";
       return;
     }
-    $scope.error = "";
-    userService.setUser($scope.userid);
-    $location.path('/home');
+    var loginUrl = '/user/login/' + $scope.userid;
+    console.log('Logging in at: ' + loginUrl);
+    $http.get(loginUrl).then(function(response) {
+      console.log('Successfully logged in')
+      $scope.error = "";
+      userService.setUser($scope.userid, response.data.csrf_token);
+      $location.path('/home');
+    }, function(failureResponse) {
+      console.log('Login failure: ' + failureResponse);
+      $scope.error = failureResponse.data.error || "Server errror";
+    });
   }
 }])
 
