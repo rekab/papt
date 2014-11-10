@@ -66,23 +66,6 @@ class User(ndb.Model):
   notetaking_time = ndb.DateTimeProperty()
   drawing_time = ndb.DateTimeProperty()
 
-#class WordCategory(object):
-#  """Validation/convenience class to store word category.
-#  
-#  Each test answer belongs to a category based on the user's login id.
-#  """
-#  def __init__(self, word, group):
-#
-#
-#class WordCategoryProperty(ndb.StringProperty):
-#  def _validate(self, value):
-#    if not isinstance(value, WordCategory):
-#      raise TypeError("%s is not a WordCategory object" % value)
-#
-#  def _to_base_type(self, value):
-#    pass
-#
-#  def _from_base_type(self, value):
 
 class TestAnswer(ndb.Model):
   user = ndb.KeyProperty(kind=User)
