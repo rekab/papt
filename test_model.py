@@ -66,6 +66,22 @@ class TestResultTestCase(BaseTest):
     self.assertEqual('nt-imm', readback.answers[1].category)
     self.assertFalse(readback.answers[1].correct)
 
+  def testAnswersAreComplete(self):
+    user1 = model.User(name=model.UserName('user-1'))
+
+    # Test a result with only one answer.
+    result = model.TestResult(
+        parent=user1.key,
+        answers=[model.TestAnswer(user=user1.key, expected='pair', got='pair')])
+    self.assertFalse(result.AllWordsAnswered())
+
+    # Add all the answers.
+    for word in model.WordCategorizer.GetTestWords():
+      result.answers.append(model.TestAnswer(user=user1.key, expected=word))
+
+    # Verify all words accounted for.
+    self.assertTrue(result.AllWordsAnswered())
+
 
 if __name__ == '__main__':
   unittest.main()

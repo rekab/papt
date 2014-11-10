@@ -12,18 +12,26 @@ USER_NAME_RE = re.compile(r'^[\w\d\-]+-([12])$')
 class WordCategorizer(object):
   _categories = None
 
-  @staticmethod
-  def CategorizeWord(word, group):
-    group_num = int(group) - 1
-    if group_num not in (0, 1):
-      raise ValueError("Invalid group number: %s" % group)
-
+  @classmethod
+  def LoadWords(cls):
     if not WordCategorizer._categories:
       path = os.path.join(os.path.split(__file__)[0], 'static/data/word-categories.json')
       with open(path) as f:
         WordCategorizer._categories = json.loads(f.read())
 
-    return WordCategorizer._categories[word][group_num]
+  @classmethod
+  def CategorizeWord(cls, word, group):
+    group_num = int(group) - 1
+    if group_num not in (0, 1):
+      raise ValueError("Invalid group number: %s" % group)
+
+    cls.LoadWords()
+    return cls._categories[word][group_num]
+
+  @classmethod
+  def GetTestWords(cls):
+    cls.LoadWords()
+    return cls._categories.keys()
 
 
 class UserName(object):
@@ -93,3 +101,9 @@ class TestAnswer(ndb.Model):
 class TestResult(ndb.Model):
   time_taken = ndb.DateTimeProperty(auto_now_add=True)
   answers = ndb.StructuredProperty(TestAnswer, repeated=True)
+  
+  def AllWordsAnswered(self):
+    words = set(WordCategorizer.GetTestWords())
+    answers = set(answer.expected for answer in self.answers)
+    return not (words - answers)
+    
