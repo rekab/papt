@@ -6,6 +6,7 @@ threadsafe: yes
 skip_files:
 - .*node_modules/.*
 - .*pyc$
+- .*\.sw[op]$
 
 handlers:
 - url: /$
