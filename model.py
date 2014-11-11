@@ -9,15 +9,25 @@ from google.appengine.ext import ndb
 USER_NAME_RE = re.compile(r'^[\w\d\-]+-([12])$')
 
 
+def GetWordCategoriesJsonData():
+  """Parses the word-categories.json file.
+
+  Expects a dictionary mapping to a list of 3 elements: 
+  [<category for group 1 users>, <category for group 2 users>, <test number>]
+  """
+  path = os.path.join(
+      os.path.split(__file__)[0], 'static/data/word-categories.json')
+  with open(path) as f:
+    return json.loads(f.read())
+
+
 class WordCategorizer(object):
   _categories = None
 
   @classmethod
   def LoadWords(cls):
     if not WordCategorizer._categories:
-      path = os.path.join(os.path.split(__file__)[0], 'static/data/word-categories.json')
-      with open(path) as f:
-        WordCategorizer._categories = json.loads(f.read())
+      WordCategorizer._categories = GetWordCategoriesJsonData()
 
   @classmethod
   def CategorizeWord(cls, word, group):
@@ -94,6 +104,7 @@ class TestAnswer(ndb.Model):
   correct = ndb.ComputedProperty(lambda self: self.got == self.expected)
   category = ndb.ComputedProperty(
       # Lookup the category of the word based on the user's group.
+      # NOTE: TestAnswer should be in the same entity group as User.
       lambda self: WordCategorizer.CategorizeWord(
         self.expected, self.user.get().group))
 
