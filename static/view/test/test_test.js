@@ -76,7 +76,7 @@ describe('papt.test module', function() {
       it('should handle empty input', function() {
         mockScope.input = '';
         mockScope.submit()
-        expect(mockScope.error).toBe('what');
+        expect(mockScope.error).toBe('Please enter a word.');
       });
 
       it('should handle a server error message', function() {

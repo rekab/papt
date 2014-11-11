@@ -68,7 +68,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
           }
         },
         function(failureResponse) {
-          console.log('got error: ' + failureResponse);
+          console.log('server error error: ' + failureResponse.status);
           $scope.error = failureResponse.data.error || "Server error";
         });
   };
