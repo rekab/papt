@@ -10,6 +10,7 @@ angular.module('papt.userservice', ['ngRoute'])
       csrfToken = newToken;
     },
     getUser: function() { return user; },
+    getCsrfToken: function() { return csrfToken; },
     checkLoggedIn: function() {
       console.log('checking logged in')
       if (user) {

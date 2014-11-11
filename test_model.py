@@ -137,5 +137,6 @@ class TestResultTestCase(base_test.BaseTest):
     VerifyCategoryForTestFlavor('d', 'nt-imm', 'nt-del', user1_results)
     VerifyCategoryForTestFlavor('d', 'dm-del', 'dm-imm', user2_results)
 
+
 if __name__ == '__main__':
   unittest.main()

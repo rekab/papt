@@ -5,28 +5,93 @@ describe('papt.test module', function() {
   beforeEach(module('papt.test'));
 
   describe('instructions controller', function() {
-    var mockScope, mockLocation, mockHttp, fakeUserService, mockTestService;
+    var mockScope, mockLocation, mockHttp, mockUserService, mockTestService;
+    var testFlavor, loggedIn, userName, csrfToken;
 
     beforeEach(inject(function($rootScope, $location, $controller, $httpBackend) {
       mockScope = $rootScope.$new();
       mockLocation = $location;
       mockHttp = $httpBackend;
       mockTestService = {
-        startTest: function(flavor) { this.flavor = flavor; }
+        getFlavor: function() {
+          return testFlavor;
+        }
+      };
+      mockUserService = {
+        getUser: function() {
+          return userName;
+        },
+        getCsrfToken: function() {
+          return csrfToken;
+        },
+        checkLoggedIn: function() {
+          return loggedIn;
+        }
       };
       var controller = $controller(
         'TestCtrl',
         { 
-          userService: fakeUserService,
+          userService: mockUserService,
           testService: mockTestService,
           $scope: mockScope,
           $location: mockLocation
         });
     }));
 
-    it('should redirect when no user', inject(function() {
-      //mockScope.start();
-      //expect(mockLocation.path()).toBe('/login');
-    }));
+    afterEach(function() {
+      mockHttp.verifyNoOutstandingExpectation();
+      mockHttp.verifyNoOutstandingRequest();
+    });
+
+    it('should return when no user', function() {
+      loggedIn = false;
+      mockScope.start();
+    });
+
+    describe('started controller', function() {
+      beforeEach(function() {
+        loggedIn = true;
+        testFlavor = 'foo';
+        userName = 'user';
+        mockScope.start();
+        mockHttp.expectGET('/data/test-foo.json').respond(200, [['foo', 'bar']]);
+        mockHttp.flush();
+        expect(mockScope.curPair).toBe(0);
+      });
+
+
+      it('should increment the counter after an answer', function() {
+        mockScope.input = 'answer';
+        mockScope.submit()
+        mockHttp.expectPOST('/test/answer', {
+          username: userName,
+          csrf_token: csrfToken,
+          expected: 'bar',
+          answer: 'answer'}).respond(200, {message: 'ok', done: false});
+        mockHttp.flush();
+
+        expect(mockScope.curPair).toBe(1);
+      });
+
+      it('should handle empty input', function() {
+        mockScope.input = '';
+        mockScope.submit()
+        expect(mockScope.error).toBe('what');
+      });
+
+      it('should handle a server error message', function() {
+        mockScope.input = 'answer';
+        mockScope.submit()
+        mockHttp.expectPOST('/test/answer', {
+          username: userName,
+          csrf_token: csrfToken,
+          expected: 'bar',
+          answer: 'answer'}).respond(400, {error: 'what'});
+        mockHttp.flush();
+
+        expect(mockScope.error).toBe('what');
+        expect(mockScope.curPair).toBe(0);
+      });
+    });
   });
 });

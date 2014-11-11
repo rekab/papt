@@ -33,7 +33,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
   };
 
   function loadTest(response) {
-    console.log('response.data='+response.data);
+    console.log('loaded test, response.data='+response.data);
     $scope.numPairs = response.data.length;
     if ($scope.numPairs < 1) {
       // TODO: user visible error
@@ -50,13 +50,26 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
       $scope.error = "Please enter a word.";
       return;
     }
-    // TODO: send the input to the server.
-    $scope.error = "";
-    $scope.input = ""
-    $scope.wrong = true;
-    $scope.curPair++;
-    if ($scope.curPair >= $scope.wordpairs.length) {
-      $location.path('/home');
-    }
+    var pair = $scope.wordpairs[$scope.curPair];
+    var postData = {
+      username: userService.getUser(),
+      csrf_token: userService.getCsrfToken(),
+      expected: pair[1],
+      answer: $scope.input
+    };
+    $http.post('/test/answer', postData).then(
+        function(response) {
+          $scope.error = "";
+          $scope.input = ""
+          $scope.curPair++;
+          if ($scope.curPair >= $scope.wordpairs.length) {
+            console.log('out of word pairs, redirecting to /done');
+            $location.path('/done');
+          }
+        },
+        function(failureResponse) {
+          console.log('got error: ' + failureResponse);
+          $scope.error = failureResponse.data.error || "Server error";
+        });
   };
 }]);
