@@ -10,6 +10,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
 }])
 
 .factory('testService', ['$location', function($location) {
+  // TODO: this service is just strange/hacky, use $routeParams instead.
   var flavor;
   return {
     setFlavor: function(desiredFlavor) { flavor = desiredFlavor; },
@@ -22,7 +23,9 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
   };
 }])
 
-.controller('TestCtrl', ['userService', 'testService', '$scope', '$location', '$http', function(userService, testService, $scope, $location, $http) {
+.controller('TestCtrl', [
+    'userService', 'testService', '$scope', '$location', '$http', 
+    function(userService, testService, $scope, $location, $http) {
   $scope.start = function() {
     if (!userService.checkLoggedIn()) {
       return;
