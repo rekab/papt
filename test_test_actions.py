@@ -5,12 +5,6 @@ import model
 import test_actions
 
 
-def CreateUserWithToken(username, token):
-  user = model.User(id=username, name=model.UserName(username))
-  user.csrf_token = model.UserCSRFToken(token=token)
-  user.put()
-
-
 class TestTest(base_test.BaseTest):
   def setUp(self):
     base_test.BaseTest.setUp(self)
@@ -33,7 +27,7 @@ class TestTest(base_test.BaseTest):
 
   def testBadCSRFToken(self):
     username = 'csrf-user-test-1'
-    CreateUserWithToken(username, 'foobar')
+    base_test.CreateUserWithToken(username, 'foobar')
 
     data = json.dumps({'username': username, 'csrf_token': 'this will not match'})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
@@ -44,7 +38,7 @@ class TestTest(base_test.BaseTest):
   def testMissingExpectedWord(self):
     username = 'user-without-an-expected-word-1'
     token = 'foo'
-    CreateUserWithToken(username, token)
+    base_test.CreateUserWithToken(username, token)
     data = json.dumps({'username': username, 'csrf_token': token, 'answer': 'foo'})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
@@ -54,7 +48,7 @@ class TestTest(base_test.BaseTest):
   def testMissingAnswer(self):
     username = 'user-without-an-answer-1'
     token = 'foo'
-    CreateUserWithToken(username, token)
+    base_test.CreateUserWithToken(username, token)
     data = json.dumps({'username': username, 'csrf_token': token, 'expected': 'foo'})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
@@ -64,7 +58,7 @@ class TestTest(base_test.BaseTest):
   def testRecordAnswer(self):
     username = 'user-answers-1'
     token = 'foo'
-    CreateUserWithToken(username, token)
+    base_test.CreateUserWithToken(username, token)
     self.PostAnswer(username, token, 'pair')  # this word must come from static/data/word-categories.json
 
     # Verify the user's result
@@ -91,7 +85,7 @@ class TestTest(base_test.BaseTest):
   def testUserFinishesTest(self):
     username = 'user-answers-everything-2'
     token = 'foo'
-    CreateUserWithToken(username, token)
+    base_test.CreateUserWithToken(username, token)
     words = model.WordCategorizer.GetTestWords()
     last_word = words.pop()
 

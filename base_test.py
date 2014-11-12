@@ -2,6 +2,15 @@ import unittest
 from google.appengine.ext import db
 from google.appengine.ext import testbed
 
+import model
+
+
+def CreateUserWithToken(username, token):
+  user = model.User(id=username, name=model.UserName(username))
+  user.csrf_token = model.UserCSRFToken(token=token)
+  user.put()
+
+
 class BaseTest(unittest.TestCase):
   def setUp(self):
     # First, create an instance of the Testbed class.
