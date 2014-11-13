@@ -8,11 +8,24 @@ skip_files:
 - .*pyc$
 - .*\.sw[op]$
 
+admin_console:
+  pages:
+  -name: Admin Reports
+  -url: /admin.html
+
 handlers:
 - url: /$
   static_files: static/index.html
   upload: static/index.html
   expiration: "15m"
+
+- url: /report/.*
+  login: admin
+  script: report_actions.app
+
+- url: /admin.*
+  login: admin
+
 
 - url: /user/.*
   script: user_actions.app
@@ -20,15 +33,14 @@ handlers:
 - url: /test/.*
   script: test_actions.app
 
-- url: /
-  static_dir: static/
-  expiration: "15m"
-  application_readable: true
-
 - url: /sound
   static_dir: static/sound
   expiration: "7d"
 
+- url: /
+  static_dir: static/
+  expiration: "15m"
+  application_readable: true
 
 - url: .*
   script: main.app

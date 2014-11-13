@@ -1,7 +1,7 @@
-<div id="reportbrowser">
+<div id="reportbrowser" ng-init="getUserList()">
   <ul>
-    <li>totals</li>
-    <li ng-repeat>username</li>
+    <li ng-click="showReportSummary()">Summary</li>
+    <li ng-repeat="username in users" ng-click="showReport(username)">{{username}}</li>
   </ul>
 </div>
-<div id="reportviewer"></div>
+<iframe id="reportviewer"></iframe>

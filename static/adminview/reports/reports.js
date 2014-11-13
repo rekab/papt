@@ -10,10 +10,10 @@ angular.module('papt.reports', ['ngRoute'])
 }])
 
 .controller('ReportsCtrl', ['$scope', function($scope) {
-  $scope.getReportList = function() {
+  $scope.getUserList = function() {
   };
-  $scope.getReportSummary = function() {
+  $scope.showReportSummary = function() {
   };
-  $scope.getReport = function() {
+  $scope.showReport = function(username) {
   };
 }]);
