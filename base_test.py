@@ -23,3 +23,11 @@ class BaseTest(unittest.TestCase):
 
   def tearDown(self):
     self.testbed.deactivate()
+
+
+class FlaskBaseTest(BaseTest):
+  def setUp(self, module_under_test):
+    BaseTest.setUp(self)
+    # Setup test flask context
+    module_under_test.app.config['TESTING'] = True
+    self.app = module_under_test.app.test_client()

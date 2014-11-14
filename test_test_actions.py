@@ -5,11 +5,9 @@ import model
 import test_actions
 
 
-class TestTest(base_test.BaseTest):
+class TestTest(base_test.FlaskBaseTest):
   def setUp(self):
-    base_test.BaseTest.setUp(self)
-    test_actions.app.config['TESTING'] = True
-    self.app = test_actions.app.test_client()
+    base_test.FlaskBaseTest.setUp(self, test_actions)
 
   def testMissingUsername(self):
     data = json.dumps({})

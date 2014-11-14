@@ -1,8 +1,5 @@
 'use strict';
 
-// Fake the papt.userservice module dependency so we can mock it out.
-angular.module('papt.reports', []);
-
 describe('papt.reports module', function() {
 
   beforeEach(module('papt.reports'));
@@ -25,5 +22,19 @@ describe('papt.reports module', function() {
       mockHttp.verifyNoOutstandingRequest();
     });
 
+    it('should call the server to get users', function() {
+      var users = ['foo', 'bar'];
+      mockHttp.expectGET('/report/list_users').respond(200, {'usernames': users});
+      mockScope.getUserList();
+      mockHttp.flush();
+      expect(mockScope.users).toEqual(users);
+    });
+
+    it('should display an error if the get user call fails', function() {
+      mockHttp.expectGET('/report/list_users').respond(400, {'error': 'broken'});
+      mockScope.getUserList();
+      mockHttp.flush();
+      expect(mockScope.error).toBe('broken');
+    });
   });
 });

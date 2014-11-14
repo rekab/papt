@@ -9,11 +9,24 @@ angular.module('papt.reports', ['ngRoute'])
   });
 }])
 
-.controller('ReportsCtrl', ['$scope', function($scope) {
+.controller('ReportsCtrl', ['$scope', '$http', function($scope, $http) {
+  $scope.error = "";
+  $scope.users = [];
+
   $scope.getUserList = function() {
+    $http.get('/report/list_users').then(
+      function(response) {
+        $scope.users = response.data.usernames;
+      },
+      function(failureResponse) {
+        $scope.error = failureResponse.data.error || "Server error";
+      });
   };
+
+
   $scope.showSummaryReport = function() {
   };
+
   $scope.showUserReport = function(username) {
   };
 }]);

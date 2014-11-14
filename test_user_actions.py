@@ -4,11 +4,9 @@ import base_test
 import model
 import user_actions
 
-class LoginTest(base_test.BaseTest):
+class LoginTest(base_test.FlaskBaseTest):
   def setUp(self):
-    base_test.BaseTest.setUp(self)
-    user_actions.app.config['TESTING'] = True
-    self.app = user_actions.app.test_client()
+    base_test.FlaskBaseTest.setUp(self, user_actions)
 
   def testLogin(self):
     data = json.dumps({'username': 'foo-1'})

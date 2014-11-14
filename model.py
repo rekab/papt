@@ -62,6 +62,9 @@ class UserName(object):
       raise ValueError('Invalid user name: %s' % name)
     self.group = m.group(1)
 
+  def __str__(self):
+    return self.name
+
 
 class UserNameProperty(ndb.StringProperty):
 
