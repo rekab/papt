@@ -10,22 +10,24 @@ skip_files:
 
 admin_console:
   pages:
-  -name: Admin Reports
-  -url: /admin.html
+  - name: Admin Reports
+    url: /admin/
 
 handlers:
-- url: /$
-  static_files: static/index.html
-  upload: static/index.html
+- url: /admin/$
+  login: admin
+  static_files: static/admin.html
+  upload: static/admin.html
   expiration: "15m"
 
 - url: /report/.*
   login: admin
   script: report_actions.app
 
-- url: /admin.*
-  login: admin
-
+- url: /$
+  static_files: static/index.html
+  upload: static/index.html
+  expiration: "15m"
 
 - url: /user/.*
   script: user_actions.app

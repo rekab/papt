@@ -4,7 +4,7 @@ angular.module('papt.reports', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/reports', {
-    templateUrl: 'adminview/reports/reports.html',
+    templateUrl: '/adminview/reports/reports.html',
     controller: 'ReportsCtrl'
   });
 }])
@@ -12,8 +12,8 @@ angular.module('papt.reports', ['ngRoute'])
 .controller('ReportsCtrl', ['$scope', function($scope) {
   $scope.getUserList = function() {
   };
-  $scope.showReportSummary = function() {
+  $scope.showSummaryReport = function() {
   };
-  $scope.showReport = function(username) {
+  $scope.showUserReport = function(username) {
   };
 }]);
