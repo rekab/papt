@@ -19,7 +19,8 @@ def view_report(username):
   users = model.User.get_by_id(username)
   test_results = model.TestResult.query(ancestor=users.key).fetch()
   # exclude user from to_dict because it's a Key object and can't be serialized
-  answers = [answer.to_dict(exclude=['user']) for answer in test_results[0].answers]
+  answers = [answer.to_dict(exclude=['user', 'csrf_token'])
+      for answer in test_results[0].answers]
   print "answers=%s" % answers
   return jsonify({'answers': answers})
 
@@ -27,6 +28,7 @@ def view_report(username):
 @app.route('/report/get_summary')
 def get_summary():
   pass
+
 
 @app.route('/report/list_users')
 def list_users():
