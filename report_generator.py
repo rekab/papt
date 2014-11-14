@@ -8,6 +8,7 @@ import model
 env = jinja2.Environment(loader=jinja2.PackageLoader(__name__, 'templates'))
 
 class Totals(object):
+  # TODO: these should be computed properties of the testresult
   def __init__(self, result):
     self.nt_imm = sum(answer.correct for answer in result.answers if answer.category=='nt-imm')
     self.dm_imm = sum(answer.correct for answer in result.answers if answer.category=='dm-imm')

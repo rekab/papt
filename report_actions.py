@@ -21,11 +21,15 @@ def page_not_found(e):
 def view_report(username):
   user = model.User.get_by_id(username)
   test_results = model.TestResult.query(ancestor=user.key).fetch()
+  if not test_results:
+    error = jsonify({'error': 'user did not take a test'})
+    error.status_code = 400;
+    return error
+
   # exclude user from to_dict because it's a Key object and can't be serialized
   answers = [answer.to_dict(exclude=['user'])
       for answer in test_results[0].answers]
-  print "user=%s answers=%s" % (user, answers)
-  return report_generator.GetReport(user, test_results[0])
+  return jsonify({'report':report_generator.GetReport(user, test_results[0])})
 
 
 @app.route('/report/get_summary')

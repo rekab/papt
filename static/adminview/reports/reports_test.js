@@ -36,5 +36,24 @@ describe('papt.reports module', function() {
       mockHttp.flush();
       expect(mockScope.error).toBe('broken');
     });
+
+    it('should call the server to get a report', function() {
+      mockScope.error = 'some old error message';
+      mockHttp.expectGET('/report/view/someuser').respond(200, {'report': 'stuff'});
+      mockScope.showUserReport('someuser');
+      mockHttp.flush();
+      expect(mockScope.error).toBe('');
+      expect(mockScope.reportContent).toBeTruthy();
+    });
+
+    it('should display an error if the report call fails', function() {
+      mockScope.reportContent = 'some old report content';
+      mockHttp.expectGET('/report/view/someuser').respond(400, {'error': 'broken'});
+      mockScope.showUserReport('someuser');
+      mockHttp.flush();
+      expect(mockScope.error).toBe('broken');
+      expect(mockScope.reportContent).not.toBeTruthy();
+    });
+
   });
 });
