@@ -1,8 +1,11 @@
+import jinja2
+
 from flask import Flask
 from flask import jsonify
 from flask import request
 
 import model
+import report_generator
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -16,13 +19,13 @@ def page_not_found(e):
 
 @app.route('/report/view/<username>')
 def view_report(username):
-  users = model.User.get_by_id(username)
-  test_results = model.TestResult.query(ancestor=users.key).fetch()
+  user = model.User.get_by_id(username)
+  test_results = model.TestResult.query(ancestor=user.key).fetch()
   # exclude user from to_dict because it's a Key object and can't be serialized
-  answers = [answer.to_dict(exclude=['user', 'csrf_token'])
+  answers = [answer.to_dict(exclude=['user'])
       for answer in test_results[0].answers]
-  print "answers=%s" % answers
-  return jsonify({'answers': answers})
+  print "user=%s answers=%s" % (user, answers)
+  return report_generator.GetReport(user, test_results[0])
 
 
 @app.route('/report/get_summary')

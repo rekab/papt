@@ -1,0 +1,44 @@
+User: {{user.name}}<br>
+Test time: {{result.time_taken}}<br>
+
+<table border>
+  <th colspan="2" center>Summary Results</th>
+  <tr>
+    <td>Total NT-Imm</td>
+    <td>{{totals.nt_imm}}</td>
+  </tr>
+
+  <tr>
+    <td>Total DM-Imm</td>
+    <td>{{totals.dm_imm}}</td>
+  </tr>
+
+  <tr>
+    <td>Total NT-Del</td>
+    <td>{{totals.nt_del}}</td>
+  </tr>
+
+  <tr>
+    <td>Total DM-Del</td>
+    <td>{{totals.dm_del}}</td>
+  </tr>
+</table>
+
+<br>
+
+<table border>
+  <tr>
+    <th>Category</th>
+    <th>Correct answer</th>
+    <th>User answer</th>
+    <th>Correct</th>
+  </tr>
+  {% for answer in result.answers %}
+  <tr>
+    <td>{{answer.category}}</td>
+    <td>{{answer.expected}}</td>
+    <td>{{answer.got}}</td>
+    <td>{{answer.correct}}</td>
+  </tr>
+  {% endfor %}
+</table>

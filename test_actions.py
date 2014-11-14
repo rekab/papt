@@ -35,6 +35,8 @@ def answer():
     raise BadJsonPost('no expected word provided')
   if 'answer' not in posted_json:
     raise BadJsonPost('no answer provided')
+
+  # TODO: distinguish between test 1 and 2
   test_results = model.TestResult.query(ancestor=user.key).fetch()
   for test_result in test_results:
     break
