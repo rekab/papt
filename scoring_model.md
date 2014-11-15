@@ -16,13 +16,25 @@ in each test falls into one of four categories:
    * nt-del (note-taking, delayed)
    * dm-del (drawing, delayed)
 
-Group 1's categorization of each word on the test is different than Group 2's.
+Group 1's categorization of words on the test is different than Group 2's.
+For every word pair, if Group 1 does note taking, Group 2 does drawing
+mnemonic. So when one group has nt-del, the other would have dm-imm.
+
+The mapping is:
+
+|group one category |group two category |
+|-------------------|-------------------|
+|nt-del             |dm-imm             |
+|dm-del             |nt-imm             |
+|dm-imm             |nt-del             |
+|nt-imm             |dm-del             |
+
+
+### Example test results
 
 The test records each word tested, the user's answer, whether they were correct,
 and which category the word belongs in (depending on if they were in group
 one or two).
-
-### Example test results
 
 Example test result for a user in group *one*:
 
@@ -46,8 +58,8 @@ Example test result for a user (with the exact same answers) in group *two*:
 
 |word|answer|correct?|category for group *two*|
 |----|------|--------|------------------------|
-|foo |fuzz  |0       |nt-del                  |
-|bar |bar   |1       |dm-del                  |
+|foo |fuzz  |0       |dm-del                  |
+|bar |bar   |1       |nt-del                  |
 |qux |qux   |1       |dm-imm                  |
 |boo |foo   |0       |nt-imm                  |
 
@@ -56,9 +68,10 @@ Their scores by category would be different:
 |category | count |
 |---------|-------|
 |nt-imm   | 0     |
-|nt-del   | 0     |
+|nt-del   | 1     |
 |dm-imm   | 1     |
-|dm-del   | 1     |
+|dm-del   | 0     |
+
 
 ### Data location
 
