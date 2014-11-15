@@ -22,7 +22,7 @@ def view_report(username):
   user = model.User.get_by_id(username)
   test_results = model.TestResult.query(ancestor=user.key).fetch()
   if not test_results:
-    error = jsonify({'error': 'user did not take a test'})
+    error = jsonify({'error': 'User "%s" did not take a test' % username})
     error.status_code = 400;
     return error
 

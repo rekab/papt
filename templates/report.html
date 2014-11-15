@@ -1,26 +1,29 @@
 User: {{user.name}}<br>
-Test time: {{result.time_taken}}<br>
+Group: {{user.group}}<br>
+Login Time: {{user.time_created}}<br>
+Superpower: {{user.superpower}}<br>
+Test Time: {{result.time_taken}}<br>
 
-<table border>
+<table border="" style="{{style['table']}}">
   <th colspan="2" center>Summary Results</th>
   <tr>
     <td>Total NT-Imm</td>
-    <td>{{totals.nt_imm}}</td>
+    <td>{{result.sum_nt_imm}}</td>
   </tr>
 
   <tr>
     <td>Total DM-Imm</td>
-    <td>{{totals.dm_imm}}</td>
+    <td>{{result.sum_dm_imm}}</td>
   </tr>
 
   <tr>
     <td>Total NT-Del</td>
-    <td>{{totals.nt_del}}</td>
+    <td>{{result.sum_nt_del}}</td>
   </tr>
 
   <tr>
     <td>Total DM-Del</td>
-    <td>{{totals.dm_del}}</td>
+    <td>{{result.sum_dm_del}}</td>
   </tr>
 </table>
 
@@ -38,7 +41,9 @@ Test time: {{result.time_taken}}<br>
     <td>{{answer.category}}</td>
     <td>{{answer.expected}}</td>
     <td>{{answer.got}}</td>
-    <td>{{answer.correct}}</td>
+    <td span 
+        style="background-color: {{(answer.correct and 'green') or 'red'}}">
+        {{answer.correct}}</td>
   </tr>
   {% endfor %}
 </table>

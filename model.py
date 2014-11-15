@@ -2,11 +2,32 @@
 import datetime
 import json
 import os
+import random
 import re
 
 from google.appengine.ext import ndb
 
 USER_NAME_RE = re.compile(r'^[\w\d\-]+-([12])$')
+
+SUPERPOWERS = [
+    "Detect garbage",
+    "Scare small fish",
+    "Read own mind",
+    "Invisible eyebrows",
+    "Induce flatulence",
+    "Removable ears",
+    "Turn fingernails into feathers",
+    "Crush own teeth",
+    "Levitate dust",
+    "Communicate with moss",
+    "Turn into shoe (once)",
+    "Predict light breezes",
+    "Forget names",
+    "Sneeze rainbows",
+    "Anger babies",
+    "Instant hair loss",
+    "Rapid nose hair growth",
+]
 
 
 def GetWordCategoriesJsonData():
@@ -97,6 +118,8 @@ class User(ndb.Model):
   notetaking_time = ndb.DateTimeProperty()
   drawing_time = ndb.DateTimeProperty()
   csrf_token = ndb.StructuredProperty(UserCSRFToken)
+  superpower = ndb.ComputedProperty(lambda self:
+      random.choice(SUPERPOWERS + ["None"]*len(SUPERPOWERS)))
 
 
 class TestAnswer(ndb.Model):
@@ -112,9 +135,17 @@ class TestAnswer(ndb.Model):
         self.expected, self.user.get().group))
 
 
+
 class TestResult(ndb.Model):
   time_taken = ndb.DateTimeProperty(auto_now_add=True)
   answers = ndb.StructuredProperty(TestAnswer, repeated=True)
+  sum_nt_imm = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('nt-imm'))
+  sum_dm_imm = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('dm-imm'))
+  sum_nt_del = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('nt-del'))
+  sum_dm_del = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('dm-del'))
+
+  def SumAnswersByCategory(self, category):
+    return sum(answer.correct for answer in self.answers if answer.category==category)
   
   def AllWordsAnswered(self):
     words = set(WordCategorizer.GetTestWords())
