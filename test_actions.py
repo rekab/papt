@@ -9,6 +9,8 @@ import model
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
+REQUIRED_ANSWER_JSON_KEYS = ['username', 'csrf_token', 'test_flavor']
+
 class BadJsonPost(Exception):
   def __init__(self, message):
     logging.error('raising error: %s', message)
@@ -55,9 +57,13 @@ def answer():
 
 def validate_json():
   posted_json = request.get_json()
-  if not posted_json or 'username' not in posted_json or 'csrf_token' not in posted_json:
-    error = 'bad json post: %s' % posted_json
-    raise BadJsonPost(error)
+  if not posted_json:
+    raise BadJsonPost('no json sent')
+
+  for key in REQUIRED_ANSWER_JSON_KEYS:
+    if key not in posted_json:
+      raise BadJsonPost('bad json post: %s' % posted_json)
+
   user = model.User.get_by_id(posted_json['username'])
   if not user:
     raise BadJsonPost('unknown user %s' % posted_json['username'])
