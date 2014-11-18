@@ -42,6 +42,6 @@
   "direct": ["dm-del", "nt-imm", "test-2"],
   "chain": ["nt-del", "dm-imm", "test-2"],
   "phase": ["nt-del", "dm-imm", "test-2"],
-  "solid ": ["nt-del", "dm-imm", "test-2"],
+  "solid": ["nt-del", "dm-imm", "test-2"],
   "victim": ["dm-del", "nt-imm", "test-2"]
 }
