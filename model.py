@@ -15,8 +15,6 @@ SUPERPOWERS = [
     "Read own mind",
     "Invisible eyebrows",
     "Induce flatulence",
-    "Removable ears",
-    "Turn fingernails into feathers",
     "Crush own teeth",
     "Levitate dust",
     "Communicate with moss",
@@ -26,7 +24,7 @@ SUPERPOWERS = [
     "Sneeze rainbows",
     "Anger babies",
     "Instant hair loss",
-    "Rapid nose hair growth",
+    "Identify furniture",
 ]
 
 
@@ -136,9 +134,15 @@ class TestAnswer(ndb.Model):
         self.expected, self.user.get().group))
 
 
+class TestFinish(ndb.Model):
+  test_flavor = ndb.StringProperty()
+  time_finished = ndb.DateTimeProperty(auto_now_add=True)
+
+
 class TestResult(ndb.Model):
   time_taken = ndb.DateTimeProperty(auto_now_add=True)
   answers = ndb.StructuredProperty(TestAnswer, repeated=True)
+  tests_finished = ndb.StructuredProperty(TestFinish, repeated=True)
   sum_nt_imm = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('nt-imm'))
   sum_dm_imm = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('dm-imm'))
   sum_nt_del = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('nt-del'))

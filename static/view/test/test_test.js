@@ -60,7 +60,8 @@ describe('papt.test module', function() {
       });
 
 
-      it('should increment the counter after an answer', function() {
+      it('should increment the counter after an answer, then redirect to /done', function() {
+        mockScope.numPairs = 1;
         mockScope.input = 'answer';
         mockScope.submit()
         mockHttp.expectPOST('/test/answer', {
@@ -69,9 +70,17 @@ describe('papt.test module', function() {
           expected: 'bar',
           answer: 'answer',
           test_flavor: testFlavor}).respond(200, {message: 'ok', done: false});
+
+        // Then the test should be finished.
+        mockHttp.expectPOST('/test/finish', {
+          username: userName,
+          csrf_token: csrfToken,
+          test_flavor: testFlavor}).respond(200, {message: 'ok'});
         mockHttp.flush();
 
+        // Verify.
         expect(mockScope.curPair).toBe(1);
+        expect(mockLocation.path()).toBe('/done');
       });
 
       it('should handle empty input', function() {

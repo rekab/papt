@@ -68,9 +68,19 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
           $scope.error = "";
           $scope.input = ""
           $scope.curPair++;
-          if ($scope.curPair >= $scope.wordpairs.length) {
-            console.log('out of word pairs, redirecting to /done');
-            $location.path('/done');
+          if ($scope.curPair >= $scope.numPairs) {
+            console.log('out of word pairs, completing test');
+            var postData = {
+              username: userService.getUser(),
+              csrf_token: userService.getCsrfToken(),
+              test_flavor: $scope.testFlavor
+            };
+            $http.post('/test/finish', postData).then(function(response) {
+              console.log('completion recorded, redirecting to /done');
+              $location.path('/done');
+            });
+          } else {
+            console.log('still have ' + ($scope.numPairs - $scope.curPair));
           }
         },
         function(failureResponse) {

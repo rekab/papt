@@ -9,7 +9,7 @@ import model
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-REQUIRED_ANSWER_JSON_KEYS = ['username', 'csrf_token']
+REQUIRED_ANSWER_JSON_KEYS = ['username', 'csrf_token', 'test_flavor']
 
 class BadJsonPost(Exception):
   def __init__(self, message):
@@ -30,6 +30,24 @@ def page_not_found(e):
     return 'Sorry, nothing at this URL.', 404
 
 
+@app.route('/test/finish', methods=['POST'])
+def finish():
+  user, posted_json = validate_json()
+  test_results = model.TestResult.query(ancestor=user.key).fetch()
+  for test_result in test_results:
+    break
+  else:
+    error = 'No test currently in progress'
+    logging.error(error)
+    response = jsonify({'error': error})
+    response.status_code = 400
+    return response
+  finish = model.TestFinish(test_flavor=posted_json['test_flavor'])
+  test_result.tests_finished.append(finish)
+  test_result.put()
+  return jsonify(message='ok')
+
+
 @app.route('/test/answer', methods=['POST'])
 def answer():
   user, posted_json = validate_json()
@@ -37,8 +55,6 @@ def answer():
     raise BadJsonPost('no expected word provided')
   if 'answer' not in posted_json:
     raise BadJsonPost('no answer provided')
-  if 'test_flavor' not in posted_json:
-    raise BadJsonPost('no test flavor provided')
 
   test_results = model.TestResult.query(ancestor=user.key).fetch()
   for test_result in test_results:

@@ -79,7 +79,7 @@ class TestTest(base_test.FlaskBaseTest):
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
     result = json.loads(response.data)
-    self.assertEquals('no test flavor provided', result['error'])
+    self.assertTrue('test_flavor not present' in result['error'])
 
 
   def testRecordAnswer(self):
@@ -133,3 +133,19 @@ class TestTest(base_test.FlaskBaseTest):
     # Should be done now!
     self.assertTrue(result['done'])
 
+    data = json.dumps({
+      'username': username,
+      'csrf_token': token,
+      'test_flavor': 'foo'})
+    response = self.app.post('/test/finish', data=data, content_type='application/json')
+    self.assertEquals(200, response.status_code)
+    result = json.loads(response.data)
+    self.assertEqual('ok', result['message'])
+
+    # Verify the model was updated.
+    user = model.User.get_by_id(username)
+    test_results = model.TestResult.query(ancestor=user.key).fetch()
+    self.assertEquals(1, len(test_results))
+    self.assertEquals(1, len(test_results[0].tests_finished))
+    self.assertEquals('foo', test_results[0].tests_finished[0].test_flavor)
+    self.assertEquals(len(words + [last_word]), len(test_results[0].answers))
