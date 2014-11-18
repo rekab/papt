@@ -29,6 +29,9 @@ condition and 11 from the NT condition) by displaying a word and an adjacent
 text box where participants will type the associated word.  Test 2 will test
 participants on the remaining word pairs. 
 
+### Scoring
+
+See [scoring_model.md](scoring_model.md).
 
 ## Run Locally
 1. Install the [App Engine Python SDK](https://developers.google.com/appengine/downloads).
