@@ -26,10 +26,12 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
 .controller('TestCtrl', [
     'userService', 'testService', '$scope', '$location', '$http', 
     function(userService, testService, $scope, $location, $http) {
+  $scope.testFlavor = '';
   $scope.start = function() {
     if (!userService.checkLoggedIn()) {
       return;
     }
+    $scope.testFlavor = testService.getFlavor();
     // Load the test.
     var jsonPath = '/data/test-' + testService.getFlavor() + '.json';
     $http.get(jsonPath).then(loadTest, function() { alert('Failed to load test data :('); });
@@ -58,7 +60,8 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
       username: userService.getUser(),
       csrf_token: userService.getCsrfToken(),
       expected: pair[1],
-      answer: $scope.input
+      answer: $scope.input,
+      test_flavor: $scope.testFlavor
     };
     $http.post('/test/answer', postData).then(
         function(response) {

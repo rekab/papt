@@ -29,20 +29,21 @@ Test Time: {{result.time_taken}}<br>
 
 <br>
 
-<table border>
+<table border="" style="{{style['table']}}">
   <tr>
+    <th>Test number</th>
     <th>Category</th>
     <th>Correct answer</th>
     <th>User answer</th>
     <th>Correct</th>
   </tr>
   {% for answer in result.answers %}
-  <tr>
+  <tr style="background-color: {{(answer.correct and '#ccffcc') or '#ffcccc'}}" title="no">
+    <td>{{answer.test_flavor}}</td>
     <td>{{answer.category}}</td>
     <td>{{answer.expected}}</td>
     <td>{{answer.got}}</td>
-    <td span 
-        style="background-color: {{(answer.correct and 'green') or 'red'}}">
+    <td style="background-color: {{(answer.correct and '#ccffcc') or '#ffcccc'}}">
         {{answer.correct}}</td>
   </tr>
   {% endfor %}

@@ -9,7 +9,7 @@ import model
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-REQUIRED_ANSWER_JSON_KEYS = ['username', 'csrf_token', 'test_flavor']
+REQUIRED_ANSWER_JSON_KEYS = ['username', 'csrf_token']
 
 class BadJsonPost(Exception):
   def __init__(self, message):
@@ -37,8 +37,9 @@ def answer():
     raise BadJsonPost('no expected word provided')
   if 'answer' not in posted_json:
     raise BadJsonPost('no answer provided')
+  if 'test_flavor' not in posted_json:
+    raise BadJsonPost('no test flavor provided')
 
-  # TODO: distinguish between test 1 and 2
   test_results = model.TestResult.query(ancestor=user.key).fetch()
   for test_result in test_results:
     break
@@ -48,7 +49,9 @@ def answer():
   answer = model.TestAnswer(
       user=user.key,
       expected=posted_json['expected'], 
-      got=posted_json['answer'])
+      got=posted_json['answer'],
+      test_flavor=posted_json['test_flavor'])
+  logging.info('Saving answer %(answer)s (flavor=%(test_flavor)s)', posted_json)
 
   test_result.answers.append(answer)
   test_result.put()
@@ -62,7 +65,7 @@ def validate_json():
 
   for key in REQUIRED_ANSWER_JSON_KEYS:
     if key not in posted_json:
-      raise BadJsonPost('bad json post: %s' % posted_json)
+      raise BadJsonPost('bad json post: %s not present in %s' % (key, posted_json))
 
   user = model.User.get_by_id(posted_json['username'])
   if not user:

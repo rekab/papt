@@ -125,6 +125,7 @@ class User(ndb.Model):
 class TestAnswer(ndb.Model):
   user = ndb.KeyProperty(kind=User)
   time_answered = ndb.DateTimeProperty(auto_now_add=True)
+  test_flavor = ndb.StringProperty()
   expected = ndb.StringProperty()
   got = ndb.StringProperty()
   correct = ndb.ComputedProperty(lambda self: self.got == self.expected)
@@ -133,7 +134,6 @@ class TestAnswer(ndb.Model):
       # NOTE: TestAnswer should be in the same entity group as User.
       lambda self: WordCategorizer.CategorizeWord(
         self.expected, self.user.get().group))
-
 
 
 class TestResult(ndb.Model):

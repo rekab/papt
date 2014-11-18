@@ -26,10 +26,12 @@ def view_report(username):
     error.status_code = 400;
     return error
 
+  # TODO: check if there is more than one result.
+
   # exclude user from to_dict because it's a Key object and can't be serialized
   answers = [answer.to_dict(exclude=['user'])
       for answer in test_results[0].answers]
-  return jsonify({'report':report_generator.GetReport(user, test_results[0])})
+  return jsonify({'report':report_generator.GetUserReport(user, test_results[0])})
 
 
 @app.route('/report/get_summary')

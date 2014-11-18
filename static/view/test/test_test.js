@@ -67,7 +67,8 @@ describe('papt.test module', function() {
           username: userName,
           csrf_token: csrfToken,
           expected: 'bar',
-          answer: 'answer'}).respond(200, {message: 'ok', done: false});
+          answer: 'answer',
+          test_flavor: testFlavor}).respond(200, {message: 'ok', done: false});
         mockHttp.flush();
 
         expect(mockScope.curPair).toBe(1);
@@ -86,7 +87,8 @@ describe('papt.test module', function() {
           username: userName,
           csrf_token: csrfToken,
           expected: 'bar',
-          answer: 'answer'}).respond(400, {error: 'what'});
+          answer: 'answer',
+          test_flavor: testFlavor}).respond(400, {error: 'what'});
         mockHttp.flush();
 
         expect(mockScope.error).toBe('what');

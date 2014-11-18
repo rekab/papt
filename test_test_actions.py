@@ -9,15 +9,18 @@ class TestTest(base_test.FlaskBaseTest):
   def setUp(self):
     base_test.FlaskBaseTest.setUp(self, test_actions)
 
-  def testMissingUsername(self):
+  def testMissingData(self):
     data = json.dumps({})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
     result = json.loads(response.data)
-    self.assertTrue('bad json post' in result['error'])
+    self.assertEquals('no json sent', result['error'])
 
   def testUnknownUser(self):
-    data = json.dumps({'username': 'no-such-user-1', 'csrf_token': 'aaaa'})
+    data = json.dumps({
+      'username': 'no-such-user-1',
+      'csrf_token': 'aaaa',
+      'test_flavor': 'foo'})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
     result = json.loads(response.data)
@@ -27,7 +30,10 @@ class TestTest(base_test.FlaskBaseTest):
     username = 'csrf-user-test-1'
     base_test.CreateUserWithToken(username, 'foobar')
 
-    data = json.dumps({'username': username, 'csrf_token': 'this will not match'})
+    data = json.dumps({
+      'username': username,
+      'csrf_token': 'this will not match',
+      'test_flavor': 'foo'})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
     result = json.loads(response.data)
@@ -37,7 +43,11 @@ class TestTest(base_test.FlaskBaseTest):
     username = 'user-without-an-expected-word-1'
     token = 'foo'
     base_test.CreateUserWithToken(username, token)
-    data = json.dumps({'username': username, 'csrf_token': token, 'answer': 'foo'})
+    data = json.dumps({
+      'username': username,
+      'csrf_token': token,
+      'answer': 'foo',
+      'test_flavor': 'foo'})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
     result = json.loads(response.data)
@@ -47,11 +57,30 @@ class TestTest(base_test.FlaskBaseTest):
     username = 'user-without-an-answer-1'
     token = 'foo'
     base_test.CreateUserWithToken(username, token)
-    data = json.dumps({'username': username, 'csrf_token': token, 'expected': 'foo'})
+    data = json.dumps({
+      'username': username,
+      'csrf_token': token,
+      'expected': 'foo',
+      'test_flavor': 'foo'})
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(400, response.status_code)
     result = json.loads(response.data)
     self.assertTrue('no answer provided' in result['error'])
+
+  def testMissingTestFlavor(self):
+    username = 'user-without-flavor-1'
+    token = 'foo'
+    base_test.CreateUserWithToken(username, token)
+    data = json.dumps({
+      'username': username,
+      'csrf_token': token,
+      'expected': 'foo',
+      'answer': 'foo'})
+    response = self.app.post('/test/answer', data=data, content_type='application/json')
+    self.assertEquals(400, response.status_code)
+    result = json.loads(response.data)
+    self.assertEquals('no test flavor provided', result['error'])
+
 
   def testRecordAnswer(self):
     username = 'user-answers-1'
@@ -73,7 +102,8 @@ class TestTest(base_test.FlaskBaseTest):
       'username': username,
       'csrf_token': token,
       'answer': 'pants',
-      'expected': expected}) 
+      'expected': expected,
+      'test_flavor': 'foo'}) 
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(200, response.status_code)
     result = json.loads(response.data)
@@ -94,7 +124,8 @@ class TestTest(base_test.FlaskBaseTest):
       'username': username,
       'csrf_token': token,
       'answer': 'pants',
-      'expected': last_word}) 
+      'expected': last_word,
+      'test_flavor': 'foo'}) 
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(200, response.status_code)
     result = json.loads(response.data)
