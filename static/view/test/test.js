@@ -26,6 +26,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
 .controller('TestCtrl', [
     'userService', 'testService', '$scope', '$location', '$http', 
     function(userService, testService, $scope, $location, $http) {
+  $scope.ready = false;
   $scope.testFlavor = '';
   $scope.start = function() {
     if (!userService.checkLoggedIn()) {
@@ -34,7 +35,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
     $scope.testFlavor = testService.getFlavor();
     // Load the test.
     var jsonPath = '/data/test-' + testService.getFlavor() + '.json';
-    $http.get(jsonPath).then(loadTest, function() { alert('Failed to load test data :('); });
+    $http.get(jsonPath).then(loadTest, serverFail);
   };
 
   function loadTest(response) {
@@ -48,6 +49,20 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
 
     $scope.wordpairs = response.data;
     $scope.curPair = 0;
+    var postData = {
+      username: userService.getUser(),
+      csrf_token: userService.getCsrfToken(),
+      test_flavor: $scope.testFlavor
+    };
+    $http.post('/test/start', postData).then(startTest, serverFail);
+  }
+
+  function startTest(response) {
+    $scope.ready = true;
+  }
+
+  function serverFail() {
+    alert('Failed to load test data :('); 
   }
 
   $scope.submit = function() {
@@ -70,6 +85,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
           $scope.curPair++;
           if ($scope.curPair >= $scope.numPairs) {
             console.log('out of word pairs, completing test');
+            $scope.ready = false; // Show the spinner
             var postData = {
               username: userService.getUser(),
               csrf_token: userService.getCsrfToken(),

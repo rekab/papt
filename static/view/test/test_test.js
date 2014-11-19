@@ -54,9 +54,15 @@ describe('papt.test module', function() {
         testFlavor = 'foo';
         userName = 'user';
         mockScope.start();
+        expect(mockScope.ready).not.toBeTruthy();
         mockHttp.expectGET('/data/test-foo.json').respond(200, [['foo', 'bar']]);
+        mockHttp.expectPOST('/test/start', {
+          username: userName,
+          csrf_token: csrfToken,
+          test_flavor: testFlavor}).respond(200, [['foo', 'bar']]);
         mockHttp.flush();
         expect(mockScope.curPair).toBe(0);
+        expect(mockScope.ready).toBeTruthy();
       });
 
 
@@ -80,6 +86,7 @@ describe('papt.test module', function() {
 
         // Verify.
         expect(mockScope.curPair).toBe(1);
+        expect(mockScope.ready).not.toBeTruthy()
         expect(mockLocation.path()).toBe('/done');
       });
 

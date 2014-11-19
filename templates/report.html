@@ -3,6 +3,9 @@ Group: {{user.group}}<br>
 Login Time: {{user.time_created}}<br>
 Superpower: {{user.superpower}}<br>
 Test Time: {{result.time_taken}}<br>
+{% for start in result.tests_started %}
+Test {{start.test_flavor}} start: {{start.time_started}}<br>
+{% endfor %}
 {% for finish in result.tests_finished %}
 Test {{finish.test_flavor}} completion: {{finish.time_finished}}<br>
 {% endfor %}

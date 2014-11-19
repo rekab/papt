@@ -11,13 +11,24 @@ app.config['DEBUG'] = True
 
 REQUIRED_ANSWER_JSON_KEYS = ['username', 'csrf_token', 'test_flavor']
 
-class BadJsonPost(Exception):
+
+class Badness(Exception):
   def __init__(self, message):
     logging.error('raising error: %s', message)
     self.message = message
 
 
-@app.errorhandler(BadJsonPost)
+class BadJsonPost(Badness):
+  pass
+
+
+class NoTestInProgress(Badness):
+  def __init__(self):
+    Badness.__init__(self, 'No test currently in progress')
+
+
+
+@app.errorhandler(Badness)
 def handle_invalid_data(error):
   response = jsonify({'error': error.message})
   response.status_code = 400
@@ -30,18 +41,39 @@ def page_not_found(e):
     return 'Sorry, nothing at this URL.', 404
 
 
+@app.route('/test/start', methods=['POST'])
+def start():
+  user, posted_json = validate_json()
+  test_results = model.TestResult.query(ancestor=user.key).fetch()
+  if test_results:
+    test_result = test_results[0]
+  else:
+    test_result = model.TestResult(parent=user.key)
+  start = model.TestStart(test_flavor=posted_json['test_flavor'])
+  test_result.tests_started.append(start)
+  test_result.put()
+  return jsonify(message='ok')
+
+
+def GetTestResult(user_key):
+  test_results = model.TestResult.query(ancestor=user_key).fetch()
+  for test_result in test_results:
+    return test_result
+  raise NoTestInProgress()
+
+
 @app.route('/test/finish', methods=['POST'])
 def finish():
   user, posted_json = validate_json()
+
   test_results = model.TestResult.query(ancestor=user.key).fetch()
-  for test_result in test_results:
-    break
-  else:
+  if not test_results:
     error = 'No test currently in progress'
     logging.error(error)
     response = jsonify({'error': error})
     response.status_code = 400
     return response
+  test_result = test_results[0]
   finish = model.TestFinish(test_flavor=posted_json['test_flavor'])
   test_result.tests_finished.append(finish)
   test_result.put()
@@ -57,10 +89,9 @@ def answer():
     raise BadJsonPost('no answer provided')
 
   test_results = model.TestResult.query(ancestor=user.key).fetch()
-  for test_result in test_results:
-    break
-  else:
-    test_result = model.TestResult(parent=user.key)
+  if not test_results:
+    raise NoTestInProgress()
+  test_result = test_results[0]
 
   answer = model.TestAnswer(
       user=user.key,

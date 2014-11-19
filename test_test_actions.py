@@ -81,12 +81,24 @@ class TestTest(base_test.FlaskBaseTest):
     result = json.loads(response.data)
     self.assertTrue('test_flavor not present' in result['error'])
 
+  def VerifyHappyResponse(self, response):
+    self.assertEquals(200, response.status_code)
+    result = json.loads(response.data)
+    self.assertEqual('ok', result['message'])
+
+  def VerifyUnhappyResponse(self, response):
+    self.assertEquals(400, response.status_code)
+    result = json.loads(response.data)
+    self.assertTrue('error' in result)
 
   def testRecordAnswer(self):
     username = 'user-answers-1'
     token = 'foo'
+    flavor = 'bar'
+    word = 'pair'  # this word must come from static/data/word-categories.json
     base_test.CreateUserWithToken(username, token)
-    self.PostAnswer(username, token, 'pair')  # this word must come from static/data/word-categories.json
+    self.VerifyHappyResponse(self.StartTest(username, token, flavor))
+    self.VerifyHappyResponse(self.PostAnswer(username, token, word))
 
     # Verify the user's result
     user = model.User.get_by_id(username)
@@ -97,6 +109,13 @@ class TestTest(base_test.FlaskBaseTest):
     self.assertEquals('pants', test_results[0].answers[0].got)
     self.assertFalse(test_results[0].answers[0].correct)
 
+  def StartTest(self, username, token, flavor):
+    data = json.dumps({
+      'username': username,
+      'csrf_token': token,
+      'test_flavor': flavor})
+    return self.app.post('/test/start', data=data, content_type='application/json')
+
   def PostAnswer(self, username, token, expected):
     data = json.dumps({
       'username': username,
@@ -104,28 +123,27 @@ class TestTest(base_test.FlaskBaseTest):
       'answer': 'pants',
       'expected': expected,
       'test_flavor': 'foo'}) 
-    response = self.app.post('/test/answer', data=data, content_type='application/json')
-    self.assertEquals(200, response.status_code)
-    result = json.loads(response.data)
-    self.assertEqual('ok', result['message'])
-    self.assertFalse(result['done'])
+    return self.app.post('/test/answer', data=data, content_type='application/json')
 
   def testUserFinishesTest(self):
     username = 'user-answers-everything-2'
     token = 'foo'
+    flavor = 'bar'
     base_test.CreateUserWithToken(username, token)
+    self.VerifyHappyResponse(self.StartTest(username, token, flavor))
+
     words = model.WordCategorizer.GetTestWords()
     last_word = words.pop()
 
     for word in words:
-      self.PostAnswer(username, token, word)
+      self.VerifyHappyResponse(self.PostAnswer(username, token, word))
 
     data = json.dumps({
       'username': username,
       'csrf_token': token,
       'answer': 'pants',
       'expected': last_word,
-      'test_flavor': 'foo'}) 
+      'test_flavor': flavor}) 
     response = self.app.post('/test/answer', data=data, content_type='application/json')
     self.assertEquals(200, response.status_code)
     result = json.loads(response.data)
@@ -149,3 +167,9 @@ class TestTest(base_test.FlaskBaseTest):
     self.assertEquals(1, len(test_results[0].tests_finished))
     self.assertEquals('foo', test_results[0].tests_finished[0].test_flavor)
     self.assertEquals(len(words + [last_word]), len(test_results[0].answers))
+
+  def testTestNotStarted(self):
+    username = 'user-answers-everything-2'
+    token = 'foo'
+    base_test.CreateUserWithToken(username, token)
+    self.VerifyUnhappyResponse(self.PostAnswer(username, token, 'pair'))

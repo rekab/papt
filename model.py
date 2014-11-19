@@ -134,6 +134,11 @@ class TestAnswer(ndb.Model):
         self.expected, self.user.get().group))
 
 
+class TestStart(ndb.Model):
+  test_flavor = ndb.StringProperty()
+  time_started = ndb.DateTimeProperty(auto_now_add=True)
+
+
 class TestFinish(ndb.Model):
   test_flavor = ndb.StringProperty()
   time_finished = ndb.DateTimeProperty(auto_now_add=True)
@@ -143,6 +148,7 @@ class TestResult(ndb.Model):
   time_taken = ndb.DateTimeProperty(auto_now_add=True)
   answers = ndb.StructuredProperty(TestAnswer, repeated=True)
   tests_finished = ndb.StructuredProperty(TestFinish, repeated=True)
+  tests_started = ndb.StructuredProperty(TestStart, repeated=True)
   sum_nt_imm = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('nt-imm'))
   sum_dm_imm = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('dm-imm'))
   sum_nt_del = ndb.ComputedProperty(lambda self: self.SumAnswersByCategory('nt-del'))
