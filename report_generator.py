@@ -9,7 +9,10 @@ env = jinja2.Environment(loader=jinja2.PackageLoader(__name__, 'templates'))
 
 # Gmail forbids CSS classes, so we must provide style on every element.
 STYLE = {
-  'table': "border-collapse:collapse;border-spacing:0px;font-family:helvetica,sans-serif;"
+  'summarytable': 'border-collapse:collapse;border-spacing:0px;'
+      'font-family:helvetica,sans-serif',
+  'resulttable': 'border-collapse:collapse;border-spacing:0px;'
+  'font-family:helvetica,sans-serif;float:right; margin: 10px'
 }
 
 

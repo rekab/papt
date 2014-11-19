@@ -1,16 +1,7 @@
-User: {{user.name}}<br>
-Group: {{user.group}}<br>
-Login Time: {{user.time_created}}<br>
-Superpower: {{user.superpower}}<br>
-Test Time: {{result.time_taken}}<br>
-{% for start in result.tests_started %}
-Test {{start.test_flavor}} start: {{start.time_started}}<br>
-{% endfor %}
-{% for finish in result.tests_finished %}
-Test {{finish.test_flavor}} completion: {{finish.time_finished}}<br>
-{% endfor %}
-
-<table border="" style="{{style['table']}}">
+<table width="100%">
+  <tr>
+    <td align="center" valign="middle">
+<table border="" style="{{style['summarytable']}}">
   <th colspan="2" center>Summary Results</th>
   <tr>
     <td>Total NT-Imm</td>
@@ -33,9 +24,10 @@ Test {{finish.test_flavor}} completion: {{finish.time_finished}}<br>
   </tr>
 </table>
 
-<br>
+</td>
 
-<table border="" style="{{style['table']}}">
+<td rowspan="2">
+<table border="" style="{{style['resulttable']}}">
   <tr>
     <th>Test number</th>
     <th>Category</th>
@@ -53,4 +45,26 @@ Test {{finish.test_flavor}} completion: {{finish.time_finished}}<br>
         {{answer.correct}}</td>
   </tr>
   {% endfor %}
+</table>
+
+</td>
+</tr>
+
+<tr>
+  <td valign="top" align="center">
+<div style="margin:5px; width: 300px; font-size: 10pt; border: 1px solid black; text-align:left">
+  User: {{user.name}}<br>
+  Group: {{user.group}}<br>
+  Login Time: {{user.time_created}}<br>
+  Superpower: {{user.superpower}}<br>
+  Test Time: {{result.time_taken}}<br>
+  {% for start in result.tests_started %}
+  Test {{start.test_flavor}} start: {{start.time_started}}<br>
+  {% endfor %}
+  {% for finish in result.tests_finished %}
+  Test {{finish.test_flavor}} completion: {{finish.time_finished}}<br>
+  {% endfor %}
+</div>
+</td>
+</tr>
 </table>

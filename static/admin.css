@@ -13,7 +13,7 @@ body {
 
 #reportbrowser {
   position: fixed;
-  width: 300;
+  width: 200px;
   height: 100%;
   top: 0;
   left: 0;
@@ -30,6 +30,7 @@ body {
 }
 
 #reportviewer {
-  border: 1px solid red;
-  float: right;
+  margin-top: 1em;
+  position: absolute;
+  left: 200px;
 }
