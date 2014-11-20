@@ -12,7 +12,7 @@ STYLE = {
   'summarytable': 'border-collapse:collapse;border-spacing:0px;'
       'font-family:helvetica,sans-serif',
   'resulttable': 'border-collapse:collapse;border-spacing:0px;'
-  'font-family:helvetica,sans-serif;float:right; margin: 10px'
+      'font-family:helvetica,sans-serif;float:right; margin: 10px'
 }
 
 
