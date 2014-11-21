@@ -1,8 +1,11 @@
+import datetime
 import logging
 
 from flask import Flask
 from flask import jsonify
 from flask import request
+
+from google.appengine.ext import ndb
 
 import model
 
@@ -27,7 +30,6 @@ class NoTestInProgress(Badness):
     Badness.__init__(self, 'No test currently in progress')
 
 
-
 @app.errorhandler(Badness)
 def handle_invalid_data(error):
   response = jsonify({'error': error.message})
@@ -43,15 +45,15 @@ def page_not_found(e):
 
 @app.route('/test/start', methods=['POST'])
 def start():
-  user, posted_json = validate_json()
-  test_results = model.TestResult.query(ancestor=user.key).fetch()
-  if test_results:
-    test_result = test_results[0]
+  user, posted_json = validate_json(['test_flavor'])
+  flavor = posted_json['test_flavor']
+  key = ndb.Key(model.TestResult, flavor, parent=user.key)
+  test_result = key.get()
+  if not test_result:
+    model.TestResult(id=flavor, parent=user.key, flavor=flavor).put()
   else:
-    test_result = model.TestResult(parent=user.key)
-  start = model.TestStart(test_flavor=posted_json['test_flavor'])
-  test_result.tests_started.append(start)
-  test_result.put()
+    # TODO: should this be an error? Support resuming a test?
+    logging.error('Started a test that already existed? %d', posted_json)
   return jsonify(message='ok')
 
 
@@ -64,40 +66,38 @@ def GetTestResult(user_key):
 
 @app.route('/test/finish', methods=['POST'])
 def finish():
-  user, posted_json = validate_json()
+  user, posted_json = validate_json(['test_flavor'])
+  flavor = posted_json['test_flavor']
+  key = ndb.Key(model.TestResult, flavor, parent=user.key)
+  test_result = key.get()
 
-  test_results = model.TestResult.query(ancestor=user.key).fetch()
-  if not test_results:
+  if not test_result:
     error = 'No test currently in progress'
     logging.error(error)
     response = jsonify({'error': error})
     response.status_code = 400
     return response
-  test_result = test_results[0]
-  finish = model.TestFinish(test_flavor=posted_json['test_flavor'])
-  test_result.tests_finished.append(finish)
+
+  test_result.time_finished = datetime.datetime.now()
   test_result.put()
   return jsonify(message='ok')
 
 
 @app.route('/test/answer', methods=['POST'])
 def answer():
-  user, posted_json = validate_json()
-  if 'expected' not in posted_json:
-    raise BadJsonPost('no expected word provided')
-  if 'answer' not in posted_json:
-    raise BadJsonPost('no answer provided')
+  user, posted_json = validate_json(['expected', 'answer', 'test_flavor'])
+  flavor = posted_json['test_flavor']
 
-  test_results = model.TestResult.query(ancestor=user.key).fetch()
-  if not test_results:
+  key = ndb.Key(model.TestResult, flavor, parent=user.key)
+  test_result = key.get()
+  if not test_result:
     raise NoTestInProgress()
-  test_result = test_results[0]
 
   answer = model.TestAnswer(
       user=user.key,
       expected=posted_json['expected'], 
       got=posted_json['answer'],
-      test_flavor=posted_json['test_flavor'])
+      test_flavor=flavor)
   logging.info('Saving answer %(answer)s (flavor=%(test_flavor)s)', posted_json)
 
   test_result.answers.append(answer)
@@ -105,14 +105,14 @@ def answer():
   return jsonify(message='ok', done=test_result.AllWordsAnswered())
 
 
-def validate_json():
+def validate_json(extra_required_keys=None):
   posted_json = request.get_json()
   if not posted_json:
     raise BadJsonPost('no json sent')
 
-  for key in REQUIRED_ANSWER_JSON_KEYS:
+  for key in REQUIRED_ANSWER_JSON_KEYS + (extra_required_keys or []):
     if key not in posted_json:
-      raise BadJsonPost('bad json post: %s not present in %s' % (key, posted_json))
+      raise BadJsonPost('bad json post: "%s" not present in %s' % (key, posted_json))
 
   user = model.User.get_by_id(posted_json['username'])
   if not user:
