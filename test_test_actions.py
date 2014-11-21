@@ -87,18 +87,6 @@ class TestTest(base_test.FlaskBaseTest):
     result = json.loads(response.data)
     self.assertTrue('"test_flavor" not present' in result['error'])
 
-  def VerifyHappyResponse(self, response):
-    if response.status_code != 200:
-      self.fail('Expected status code 200, got: %s (data=%s)' % (
-          response, response.data))
-    result = json.loads(response.data)
-    self.assertEqual('ok', result['message'])
-
-  def VerifyUnhappyResponse(self, response):
-    self.assertEquals(400, response.status_code)
-    result = json.loads(response.data)
-    self.assertTrue('error' in result)
-
   def testRecordAnswer(self):
     username = 'user-answers-1'
     token = 'foo'

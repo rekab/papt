@@ -18,3 +18,7 @@ class TestReportActions(base_test.FlaskBaseTest):
     self.assertEquals(len(data['usernames']), 2)
     self.assertEquals(data['usernames'][0], 'foo-1')
     self.assertEquals(data['usernames'][1], 'bar-2')
+
+  def testViewReport(self):
+    #response = self.app.get('/report/view/foo')
+    pass
