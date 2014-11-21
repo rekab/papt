@@ -31,13 +31,7 @@ def view_report(username):
     error.status_code = 400;
     return error
 
-  answers = []
-  for test_result in test_results:
-    for answer in test_result.answers:
-      # exclude "user" from to_dict() because Key objects can't be jsonified
-      answers.append(answer.to_dict(exclude=['user']))
-
-  return jsonify({'report':report_generator.GetUserReport(user, test_results[0])})
+  return jsonify({'report':report_generator.GetUserReport(user, test_results)})
 
 
 @app.route('/report/get_summary')
