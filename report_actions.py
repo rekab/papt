@@ -20,17 +20,23 @@ def page_not_found(e):
 @app.route('/report/view/<username>')
 def view_report(username):
   user = model.User.get_by_id(username)
+  if not user:
+    error = jsonify({'error': 'User "%s" does not exist' % username})
+    error.status_code = 400;
+    return error
+
   test_results = model.TestResult.query(ancestor=user.key).fetch()
   if not test_results:
     error = jsonify({'error': 'User "%s" did not take a test' % username})
     error.status_code = 400;
     return error
 
-  # TODO: check if there is more than one result.
+  answers = []
+  for test_result in test_results:
+    for answer in test_result.answers:
+      # exclude "user" from to_dict() because Key objects can't be jsonified
+      answers.append(answer.to_dict(exclude=['user']))
 
-  # exclude user from to_dict because it's a Key object and can't be serialized
-  answers = [answer.to_dict(exclude=['user'])
-      for answer in test_result.answers for test result in test_results]
   return jsonify({'report':report_generator.GetUserReport(user, test_results[0])})
 
 
