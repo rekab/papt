@@ -30,7 +30,7 @@ def view_report(username):
 
   # exclude user from to_dict because it's a Key object and can't be serialized
   answers = [answer.to_dict(exclude=['user'])
-      for answer in test_results[0].answers]
+      for answer in test_result.answers for test result in test_results]
   return jsonify({'report':report_generator.GetUserReport(user, test_results[0])})
 
 
