@@ -55,5 +55,34 @@ describe('papt.reports module', function() {
       expect(mockScope.reportContent).not.toBeTruthy();
     });
 
+    it('should call the server to get a summary', function() {
+      mockScope.error = 'some old error message';
+      var response = {
+        "answers": [
+          {
+            "category": "dm-del",
+            "correct": false,
+            "expected": "decay",
+            "got": "word",
+            "test_flavor": "bar",
+            "time_answered": "Sat, 22 Nov 2014 20:01:50 GMT"
+          },
+          {
+            "category": "dm-imm",
+            "correct": false,
+            "expected": "pair",
+            "got": "got",
+            "test_flavor": "foo",
+            "time_answered": "Sat, 22 Nov 2014 20:01:50 GMT"
+          } 
+        ] 
+      };
+      mockHttp.expectGET('/report/get_summary').respond(200, response);
+      mockScope.showSummaryReport();
+      mockHttp.flush();
+      expect(mockScope.error).toBe('');
+      expect(mockScope.summary).toBeTruthy();
+    });
+
   });
 });

@@ -36,8 +36,15 @@ def view_report(username):
 
 @app.route('/report/get_summary')
 def get_summary():
-  # TODO: summary report
-  pass
+  # Get all the test results and return them as json. Offload all the
+  # processing to the client.
+  response_data = []
+  results = model.TestResult.query().fetch()
+  for result in results:
+    for answer in result.answers:
+      # exclude "user": it's a Key object that can't be serialized
+      response_data.append(answer.to_dict(exclude=['user']))
+  return jsonify({'answers': response_data})
 
 
 @app.route('/report/list_users')

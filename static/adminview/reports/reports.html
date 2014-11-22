@@ -5,4 +5,49 @@
     <li ng-repeat="username in users" ng-click="showUserReport(username)">{{username}}</li>
   </ul>
 </div>
-<div id="reportviewer" ng-bind-html="reportContent"></div>
+<div id="reportviewer" ng-bind-html="reportContent" ng-show="reportContent"></div>
+<div id="summaryviewer" ng-show="summary" ng-init="showSummaryReport()">
+  <input type="radio" id="group_category" name="group_by" ng-model="summaryGrouping" value="category">
+  <label for="group_category">Group by category</label>
+
+  <input type="radio" id="group_word" name="group_by" ng-model="summaryGrouping" value="word">
+  <label for="group_word">Group by word</label>
+
+  <table border="" ng-show="summaryGrouping=='category'">
+    <tr>
+      <th>Category</th>
+      <th>Correct</th>
+      <th>Incorrect</th>
+    </tr>
+    <tr ng-repeat="category in categories | orderBy:['-correct','incorrect','name']">
+      <td>
+        {{category.name}}
+      </td>
+      <td>
+        {{category.correct}}
+      </td>
+      <td>
+        {{category.incorrect}}
+      </td>
+    </tr>
+  </table>
+
+  <table border="" ng-show="summaryGrouping=='word'">
+    <tr>
+      <th>Word</th>
+      <th>Correct</th>
+      <th>Incorrect</th>
+    </tr>
+    <tr ng-repeat="word in words | orderBy:['-correct','incorrect','word']">
+      <td>
+        {{word.name}}
+      </td>
+      <td>
+        {{word.correct}}
+      </td>
+      <td>
+        {{word.incorrect}}
+      </td>
+    </tr>
+  </table>
+</div>

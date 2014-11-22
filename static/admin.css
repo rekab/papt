@@ -32,5 +32,28 @@ body {
 #reportviewer {
   margin-top: 1em;
   position: absolute;
-  left: 200px;
+  left: 220px;
+}
+
+#summaryviewer {
+  margin-top: 1em;
+  position: absolute;
+  left: 220px;
+}
+
+#summaryviewer input[type="radio"] {
+  display:none; 
+}
+
+#summaryviewer label {
+  display:inline-block;
+  background-color:#ddd;
+  padding:4px 11px;
+  box-shadow: 1px 1px 2px 1px #888888;
+  border-radius: 10px 10px 10px 10px;
+}
+
+#summaryviewer input[type="radio"]:checked + label { 
+  background-color:#9099f0;
+  box-shadow: 1px 1px 2px 1px #888888 inset;
 }
