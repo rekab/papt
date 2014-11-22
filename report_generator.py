@@ -28,6 +28,7 @@ class TestResultsSummary(object):
 
 
 def DatetimeFilter(d):
+  # TODO: localtime
   #return d.astimezone(tz.gettz('PST8PDT')).strftime('%Y-%m-%d ')
   #return d.replace(tzinfo=pytz.UTC).astimezone(pytz.timezone('PST8PDT'))
   return d.strftime('%Y-%m-%d %H:%M:%S UTC')

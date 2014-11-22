@@ -36,6 +36,7 @@ def view_report(username):
 
 @app.route('/report/get_summary')
 def get_summary():
+  # TODO: summary report
   pass
 
 

@@ -27,9 +27,11 @@ angular.module('papt.reports', ['ngRoute'])
 
 
   $scope.showSummaryReport = function() {
+    // TODO: summary report
   };
 
   $scope.showUserReport = function(username) {
+    // TODO: should route to a view so the username is in the URL, with browser history
     $http.get('/report/view/' + username).then(
       function(response) {
         $scope.error = "";
