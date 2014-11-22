@@ -34,22 +34,42 @@
     </tr>
   </table>
 
-  <table border="" ng-show="summaryGrouping=='word'" cols="3">
-    <tr>
-      <th>Word</th>
-      <th>Correct</th>
-      <th>Incorrect</th>
-    </tr>
-    <tr ng-repeat="word in words | orderBy:['-correct','incorrect','name']">
-      <td>
-        {{word.name}}
-      </td>
-      <td>
-        {{word.correct}}
-      </td>
-      <td>
-        {{word.incorrect}}
-      </td>
-    </tr>
-  </table>
+  <div ng-show="summaryGrouping=='word'"> 
+    <table border="" cols="3" id="wordgrouping">
+      <tr>
+        <th>Word</th>
+        <th>Correct</th>
+        <th>Incorrect</th>
+      </tr>
+      <tr ng-repeat="word in words | orderBy:['-correct','incorrect','name']">
+        <td>
+          <a href='' ng-click="showDrilldown(word.name)">{{word.name}}</a>
+        </td>
+        <td>
+          {{word.correct}}
+        </td>
+        <td>
+          {{word.incorrect}}
+        </td>
+      </tr>
+    </table>
+
+    <table ng-show="drilldown" id="drilldown">
+      <tr>
+        <th>User</th>
+        <th>Category</th>
+        <th>Test</th>
+        <th>Expected</th>
+        <th>Got</th>
+      </tr>
+      <tr ng-repeat="answer in drilldown"
+        ng-style="{backgroundColor: answer.correct ? '#ccffcc' : '#ffcccc'}">
+        <td>{{answer.username}}</td>
+        <td>{{answer.got}}</td>
+        <td>{{answer.test_flavor}}</td>
+        <td>{{answer.expected}}</td>
+        <td>{{answer.category}}</td>
+      </tr>
+    </table>
+  </div>
 </div>

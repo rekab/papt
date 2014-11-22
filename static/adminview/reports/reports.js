@@ -67,7 +67,6 @@ angular.module('papt.reports', ['ngRoute'])
         groups[answer[key]].correct++;
       } else {
         groups[answer[key]].incorrect++;
-        console.log(answer[key] + ' is incorrect: ' + groups[answer[key]].incorrect)
       }
     }
     var ret = [];
@@ -79,6 +78,19 @@ angular.module('papt.reports', ['ngRoute'])
       ret.push(sum);
     }
     return ret;
+  }
+
+  $scope.showDrilldown = function(word) {
+    $http.get('/report/drilldown/' + word).then(
+      function(response) {
+        $scope.error = "";
+        $scope.drilldown = response.data.answers;
+      },
+      function(failureResponse) {
+        $scope.error = failureResponse.data.error || "Server error";
+        $scope.reportContent = "";
+        $scope.summary = false;
+      });
   }
 
   $scope.showUserReport = function(username) {

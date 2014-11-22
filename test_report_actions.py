@@ -62,3 +62,15 @@ class TestReportActions(base_test.FlaskBaseTest):
     self.assertEquals('word', data['answers'][0]['got'])
     self.assertEquals('pair', data['answers'][1]['expected'])
     self.assertEquals('got', data['answers'][1]['got'])
+
+  def testGetDrilldown(self):
+    user_key = self.PutUser('foo-1')
+    self.PutTestResult(user_key, 'foo', [['pair', 'got'], ['decay', 'fuzz']])
+    self.PutTestResult(user_key, 'bar', [['baby', 'stuff']])
+    response = self.app.get('/report/drilldown/pair')
+    self.assertEquals(200, response.status_code)
+    data = json.loads(response.data)
+    self.assertEquals(1, len(data['answers']))
+    self.assertEquals('pair', data['answers'][0]['expected'])
+    self.assertEquals('got', data['answers'][0]['got'])
+    self.assertEquals('foo-1', data['answers'][0]['username'])
