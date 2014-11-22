@@ -13,7 +13,7 @@ angular.module('papt.reports', ['ngRoute'])
   $scope.error = "";
   $scope.summary = false;
   $scope.summaryGrouping = "category";
-  $scope.reportContent = $sce.trustAsHtml("<b>click stuff</b>");
+  $scope.reportContent = $sce.trustAsHtml("");
   $scope.users = [];
 
   $scope.getUserList = function() {

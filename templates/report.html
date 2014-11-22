@@ -1,79 +1,91 @@
 <table width="100%">
   <tr>
-    <td align="center" valign="middle">
+    <td align="center" valign="top">
 
-<table border="" style="{{style['summarytable']}}">
-  <th colspan="2" center>Summary Results</th>
-  <tr>
-    <td>Total NT-Imm</td>
-    <td>{{summary.sum_nt_imm}}</td>
-  </tr>
+      <table border="" style="{{style['summarytable']}}">
+        <th colspan="2" center>Summary Results</th>
+        <tr>
+          <td>Total NT-Imm</td>
+          <td>{{summary.sum_nt_imm}}</td>
+        </tr>
 
-  <tr>
-    <td>Total DM-Imm</td>
-    <td>{{summary.sum_dm_imm}}</td>
-  </tr>
+        <tr>
+          <td>Total DM-Imm</td>
+          <td>{{summary.sum_dm_imm}}</td>
+        </tr>
 
-  <tr>
-    <td>Total NT-Del</td>
-    <td>{{summary.sum_nt_del}}</td>
-  </tr>
+        <tr>
+          <td>Total NT-Del</td>
+          <td>{{summary.sum_nt_del}}</td>
+        </tr>
 
-  <tr>
-    <td>Total DM-Del</td>
-    <td>{{summary.sum_dm_del}}</td>
-  </tr>
-</table>
+        <tr>
+          <td>Total DM-Del</td>
+          <td>{{summary.sum_dm_del}}</td>
+        </tr>
+      </table>
+      <div style="margin:5px; width: 300px; font-size: 10pt; border: 1px solid black; text-align:left">
+        <table>
+          <tr>
+            <td>User:</td>
+            <td>{{user.name}}</td>
+          </tr>
+          <tr>
+            <td>Group:</td>
+            <td>{{user.group}}</td>
+          </tr>
+          <tr>
+            <td>Login Time:</td>
+            <td>{{user.time_created | DatetimeFilter}}</td>
+          </tr>
+          <tr>
+            <td>Superpower:</td>
+            <td> {{user.superpower}}</td>
+          </tr>
+          {% for result in results %}
+          <tr>
+            <td valign="top">Test {{result.flavor}}:</td>
+            <td>
+              {% if result.time_started %}
+                started at {{result.time_started | DatetimeFilter}}, 
+              {% else %}
+                not started
+              {% endif %}
+              <br>
+              {% if result.time_finished %}
+                completed at {{result.time_finished | DatetimeFilter}}
+              {% else %}
+                never completed
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </td>
+    <td>
+      <table border="" style="{{style['resulttable']}}">
+        <tr>
+          <th>Test number</th>
+          <th>Category</th>
+          <th>Correct answer</th>
+          <th>User answer</th>
+          <th>Correct</th>
+        </tr>
+        {% for result in results %}
+          {% for answer in result.answers %}
+          <tr style="background-color: {{(answer.correct and '#ccffcc') or '#ffcccc'}}" title="no">
+            <td>{{answer.test_flavor}}</td>
+            <td>{{answer.category}}</td>
+            <td>{{answer.expected}}</td>
+            <td>{{answer.got}}</td>
+            <td style="background-color: {{(answer.correct and '#ccffcc') or '#ffcccc'}}">
+                {{answer.correct}}</td>
+          </tr>
+          {% endfor %}
+        {% endfor %}
+      </table>
 
-</td>
-
-<td rowspan="2">
-  <table border="" style="{{style['resulttable']}}">
-    <tr>
-      <th>Test number</th>
-      <th>Category</th>
-      <th>Correct answer</th>
-      <th>User answer</th>
-      <th>Correct</th>
-    </tr>
-    {% for result in results %}
-      {% for answer in result.answers %}
-      <tr style="background-color: {{(answer.correct and '#ccffcc') or '#ffcccc'}}" title="no">
-        <td>{{answer.test_flavor}}</td>
-        <td>{{answer.category}}</td>
-        <td>{{answer.expected}}</td>
-        <td>{{answer.got}}</td>
-        <td style="background-color: {{(answer.correct and '#ccffcc') or '#ffcccc'}}">
-            {{answer.correct}}</td>
-      </tr>
-      {% endfor %}
-    {% endfor %}
-  </table>
-
-</td>
-</tr>
-
-<tr>
-  <td valign="top" align="center">
-<div style="margin:5px; width: 300px; font-size: 10pt; border: 1px solid black; text-align:left">
-  User: {{user.name}}<br>
-  Group: {{user.group}}<br>
-  Login Time: {{user.time_created | DatetimeFilter}}<br>
-  Superpower: {{user.superpower}}<br>
-  {% for result in results %}
-    Test {{result.flavor}}: 
-    {% if result.time_started %}
-      started at {{result.time_started | DatetimeFilter}}, 
-    {% else %}
-      not started
-    {% endif %}
-    {% if result.time_finished %}
-      completed at {{result.time_finished | DatetimeFilter}}<br>
-    {% else %}
-      never completed
-    {% endif %}
-  {% endfor %}
-</div>
-</td>
+    </td>
 </tr>
 </table>

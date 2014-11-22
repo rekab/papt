@@ -13,7 +13,9 @@
   <input type="radio" id="group_word" name="group_by" ng-model="summaryGrouping" value="word">
   <label for="group_word">Group by word</label>
 
-  <table border="" ng-show="summaryGrouping=='category'">
+  <br>
+  <br>
+  <table border="" ng-show="summaryGrouping=='category'" cols="3">
     <tr>
       <th>Category</th>
       <th>Correct</th>
@@ -32,13 +34,13 @@
     </tr>
   </table>
 
-  <table border="" ng-show="summaryGrouping=='word'">
+  <table border="" ng-show="summaryGrouping=='word'" cols="3">
     <tr>
       <th>Word</th>
       <th>Correct</th>
       <th>Incorrect</th>
     </tr>
-    <tr ng-repeat="word in words | orderBy:['-correct','incorrect','word']">
+    <tr ng-repeat="word in words | orderBy:['-correct','incorrect','name']">
       <td>
         {{word.name}}
       </td>
