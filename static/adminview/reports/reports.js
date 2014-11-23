@@ -81,7 +81,7 @@ angular.module('papt.reports', ['ngRoute'])
   }
 
   $scope.showDrilldown = function(word) {
-    $http.get('/report/drilldown/' + word).then(
+    $http.get('/report/drilldown/word/' + word).then(
       function(response) {
         $scope.error = "";
         $scope.drilldown = response.data.answers;

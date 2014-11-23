@@ -84,5 +84,7 @@ describe('papt.reports module', function() {
       expect(mockScope.summary).toBeTruthy();
     });
 
+    // TODO: test drilldown
+
   });
 });

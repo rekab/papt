@@ -46,18 +46,33 @@ def get_summary():
       response_data.append(answer.to_dict(exclude=['user']))
   return jsonify({'answers': response_data})
 
-@app.route('/report/drilldown/<word>')
-def get_drilldown(word):
-  results = model.TestResult.query(model.TestResult.answers.expected==word).fetch()
+
+def JsonifyDrilldownData(results, comparator):
   response_data = []
   for result in results:
     for answer in result.answers:
-      if answer.expected == word:
-        # exclude "user": it's a Key object that can't be serialized
+      if comparator(answer):
+        # Exclude "user": it's a Key object that can't be serialized.
         datum = answer.to_dict(exclude=['user'])
+        # Convert it to a string instead.
         datum['username'] = str(answer.user.get().name)
         response_data.append(datum)
   return jsonify({'answers': response_data})
+
+
+@app.route('/report/drilldown/word/<word>')
+def get_drilldown_word(word):
+  return JsonifyDrilldownData(model.TestResult.query(
+      model.TestResult.answers.expected==word).fetch(),
+      lambda answer: answer.expected == word)
+
+
+@app.route('/report/drilldown/category/<category>')
+def get_drilldown_category(category):
+  return JsonifyDrilldownData(model.TestResult.query(
+      model.TestResult.answers.category==category).fetch(),
+      lambda answer: answer.category == category)
+
 
 @app.route('/report/list_users')
 def list_users():
