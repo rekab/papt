@@ -85,7 +85,7 @@ angular.module('papt.wordpairs', ['ngRoute', 'papt.userservice'])
       transitionToNextWordPair();
       return;
     }
-    var width = (100 * ($scope.numTicksLeft / $scope.maxNumTicks));
+    var width = 100 - (100 * ($scope.numTicksLeft / $scope.maxNumTicks));
     $scope.progressbarStyle = {width: width + "%"};
   }
 
