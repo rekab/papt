@@ -233,3 +233,8 @@ body {
   font-style: italic;
   border-bottom: 1px solid #cccccc;
 }
+.footer {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}

@@ -11,6 +11,7 @@ angular.module('papt.home', ['ngRoute', 'papt.userservice', 'papt.wordpairs', 'p
 
 .controller('HomeCtrl', ['$scope', 'userService', 'wordpairService', 'testService', function($scope, userService, wordpairService, testService) {
   $scope.checkLoggedIn = userService.checkLoggedIn;
+  $scope.username = userService.getUser();
   $scope.showWordPairs = function(flavor) {
     console.log('attempting to load wordpair flavor ' + flavor);
     wordpairService.goToWordpairPresentation(flavor);
