@@ -78,6 +78,8 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
       answer: $scope.input,
       test_flavor: $scope.testFlavor
     };
+    // Clear the input so it doesn't get re-submitted
+    $scope.input = "";
     $http.post('/test/answer', postData).then(
         function(response) {
           $scope.error = "";
