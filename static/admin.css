@@ -73,8 +73,9 @@ body {
 
 #wordgrouping {
   float: left;
+  width: 300px;
 }
 #drilldown {
-  float: right;
-  margin-left: 10px;
+  position: fixed;
+  left: 580px;
 }
