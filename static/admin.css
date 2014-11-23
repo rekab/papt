@@ -71,11 +71,19 @@ body {
   padding-right: 5px;
 }
 
-#wordgrouping {
+.summary {
   float: left;
   width: 300px;
 }
 #drilldown {
   position: fixed;
   left: 580px;
+  height: 80%;
+  width: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#drilldown table {
+  width: 100%;
+  margin-right: 10px;
 }

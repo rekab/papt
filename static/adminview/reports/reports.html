@@ -7,15 +7,15 @@
 </div>
 <div id="reportviewer" ng-bind-html="reportContent" ng-show="reportContent"></div>
 <div id="summaryviewer" ng-show="summary" ng-init="showSummaryReport()">
-  <input type="radio" id="group_category" name="group_by" ng-model="summaryGrouping" value="category">
+  <input type="radio" id="group_category" name="group_by" ng-model="summaryGrouping" value="category" ng-change="resetDrilldown()">
   <label for="group_category">Group by category</label>
 
-  <input type="radio" id="group_word" name="group_by" ng-model="summaryGrouping" value="word">
+  <input type="radio" id="group_word" name="group_by" ng-model="summaryGrouping" value="word" ng-change="resetDrilldown()">
   <label for="group_word">Group by word</label>
 
   <br>
   <br>
-  <table border="" ng-show="summaryGrouping=='category'" cols="3">
+  <table border="" ng-show="summaryGrouping=='category'" cols="3" class="summary">
     <tr>
       <th>Category</th>
       <th>Correct</th>
@@ -23,7 +23,7 @@
     </tr>
     <tr ng-repeat="category in categories | orderBy:['-correct','incorrect','name']">
       <td>
-        {{category.name}}
+        <a href='' ng-click="showCategoryDrilldown(category.name)">{{category.name}}</a>
       </td>
       <td>
         {{category.correct}}
@@ -34,27 +34,27 @@
     </tr>
   </table>
 
-  <div ng-show="summaryGrouping=='word'">
-    <table border="" cols="3" id="wordgrouping">
-      <tr>
-        <th>Word</th>
-        <th>Correct</th>
-        <th>Incorrect</th>
-      </tr>
-      <tr ng-repeat="word in words | orderBy:['-correct','incorrect','name']">
-        <td>
-          <a href='' ng-click="showDrilldown(word.name)">{{word.name}}</a>
-        </td>
-        <td>
-          {{word.correct}}
-        </td>
-        <td>
-          {{word.incorrect}}
-        </td>
-      </tr>
-    </table>
+  <table border="" cols="3" ng-show="summaryGrouping=='word'" class="summary">
+    <tr>
+      <th>Word</th>
+      <th>Correct</th>
+      <th>Incorrect</th>
+    </tr>
+    <tr ng-repeat="word in words | orderBy:['-correct','incorrect','name']">
+      <td>
+        <a href='' ng-click="showWordDrilldown(word.name)">{{word.name}}</a>
+      </td>
+      <td>
+        {{word.correct}}
+      </td>
+      <td>
+        {{word.incorrect}}
+      </td>
+    </tr>
+  </table>
 
-    <table ng-show="drilldown" id="drilldown">
+  <div id="drilldown">
+    <table ng-show="drilldown">
       <tr>
         <th>User</th>
         <th>Category</th>

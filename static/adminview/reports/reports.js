@@ -32,8 +32,8 @@ angular.module('papt.reports', ['ngRoute'])
       function(response) {
         $scope.error = "";
         $scope.reportContent = "";
-        $scope.categories = groupByCategory(response.data.answers);
-        $scope.words = groupByWord(response.data.answers);
+        $scope.categories = groupBy(response.data.answers, 'category');
+        $scope.words = groupBy(response.data.answers, 'expected');
         $scope.summary = true;
       },
       function(failureResponse) {
@@ -42,14 +42,6 @@ angular.module('papt.reports', ['ngRoute'])
         $scope.summary = false;
       });
   };
-
-  function groupByCategory(answers) {
-    return groupBy(answers, 'category');
-  }
-
-  function groupByWord(answers) {
-    return groupBy(answers, 'expected');
-  }
 
   function groupBy(answers, key) {
     var groups = {};
@@ -80,7 +72,7 @@ angular.module('papt.reports', ['ngRoute'])
     return ret;
   }
 
-  $scope.showDrilldown = function(word) {
+  $scope.showWordDrilldown = function(word) {
     $http.get('/report/drilldown/word/' + word).then(
       function(response) {
         $scope.error = "";
@@ -91,6 +83,24 @@ angular.module('papt.reports', ['ngRoute'])
         $scope.reportContent = "";
         $scope.summary = false;
       });
+  }
+
+  $scope.showCategoryDrilldown = function(category) {
+    $http.get('/report/drilldown/category/' + category).then(
+      function(response) {
+        $scope.error = "";
+        $scope.drilldown = response.data.answers;
+      },
+      function(failureResponse) {
+        $scope.error = failureResponse.data.error || "Server error";
+        $scope.reportContent = "";
+        $scope.summary = false;
+      });
+  }
+
+  $scope.resetDrilldown = function() {
+    console.log('reset drilldown');
+    $scope.drilldown = [];
   }
 
   $scope.showUserReport = function(username) {
