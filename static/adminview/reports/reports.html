@@ -1,7 +1,7 @@
 <div id="error" ng-show="error">{{error}}</div>
 <div id="reportbrowser" ng-init="getUserList()">
   <ul>
-    <li ng-click="showSummaryReport()">Summary</li>
+    <li ng-click="showSummaryReport()"><b>Summary</b></li>
     <li ng-repeat="username in users" ng-click="showUserReport(username)">{{username}}</li>
   </ul>
 </div>
