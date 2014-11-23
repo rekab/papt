@@ -24,7 +24,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
 }])
 
 .controller('TestCtrl', [
-    'userService', 'testService', '$scope', '$location', '$http', 
+    'userService', 'testService', '$scope', '$location', '$http',
     function(userService, testService, $scope, $location, $http) {
   $scope.ready = false;
   $scope.testFlavor = '';
@@ -62,7 +62,7 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
   }
 
   function serverFail() {
-    alert('Failed to load test data :('); 
+    alert('Failed to load test data :(');
   }
 
   $scope.submit = function() {
@@ -95,12 +95,10 @@ angular.module('papt.test', ['ngRoute', 'papt.userservice'])
               console.log('completion recorded, redirecting to /done');
               $location.path('/done');
             });
-          } else {
-            console.log('still have ' + ($scope.numPairs - $scope.curPair));
           }
         },
         function(failureResponse) {
-          console.log('server error error: ' + failureResponse.status);
+          console.log('server error: ' + failureResponse.status);
           $scope.error = failureResponse.data.error || "Server error";
         });
   };
