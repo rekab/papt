@@ -2,13 +2,18 @@
 body {
   font-family: helvetica, sans-serif;
 }
-#error {
+.error {
   position: absolute;
   left: 50%;
-  width: 200px;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 300px;
+  padding: 5px;
   background-color: red;
   color: white;
   font-weight: bold;
+  border-radius: 5px 5px 5px 5px;
+  margin: 5px;
 }
 
 #reportbrowser {
