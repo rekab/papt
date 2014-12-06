@@ -10,7 +10,8 @@
 <div id="testcontainer" ng-init="start()" ng-show="ready">
   <form id="test" ng-submit="submit()">
     <label id="firstword" for="blank">{{wordpairs[curPair][0]}}</label>
-    <input id="blank" type="text" ng-model="input" autofocus required size="10">
+    <input id="blank" type="text" ng-model="input" onblur="focus(this)" 
+    autofocus required size="10">
     <input type="submit" value="Submit">
   </form>
   <div class="loginerror" ng-show="error">{{error}}</div>
