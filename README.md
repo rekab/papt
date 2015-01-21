@@ -67,6 +67,13 @@ Visit the application [http://localhost:8080](http://localhost:8080)
 See [the development server documentation](https://developers.google.com/appengine/docs/python/tools/devserver)
 for options when running dev_appserver.
 
+## Unit Testing
+
+```
+python run_tests.py .../google-cloud-sdk/platform/google_appengine/ .
+npm test
+```
+
 ## Deploy
 To deploy the application:
 
