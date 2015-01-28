@@ -1,5 +1,6 @@
 import datetime
 import logging
+import mail_settings
 import xlsxwriter
 import StringIO
 
@@ -83,7 +84,22 @@ def finish():
 
   test_result.time_finished = datetime.datetime.now()
   test_result.put()
+  MailTestResult(test_result)
   return jsonify(message='ok')
+
+
+def MailTestResult(test_result):
+  src = mail_settings.EMAIL_SOURCE
+  dest = mail_settings.EMAIL_DESTINATION
+  subject = mail_settings.SUBJECT
+  attachment = GenerateExcelFile(test_result)
+  mail.send_mail(
+      sender=src, to=dest, subject=subject, body="Here's some stuff.",
+      attachments=[('papt.xls', attachment)])
+
+
+def GenerateExcelFile(test_result):
+  return 'asdf'
 
 
 @app.route('/test/answer', methods=['POST'])

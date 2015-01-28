@@ -8,3 +8,4 @@ tmp
 .idea
 .*.swp
 *.pyc
+mail_settings.py

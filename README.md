@@ -53,7 +53,13 @@ See the README file for directions. You'll need python 2.7 and [pip 1.4 or later
    cd papt
    pip install -r requirements.txt -t pylib
    ```
-5. Run this project locally from the command line:
+
+5. Create a "mail_settings.py" file with one variable:
+   ```
+   EMAIL_DESTINATION = "your_email@here.tld"
+   ```
+
+6. Run this project locally from the command line:
 
    ```
    npm start

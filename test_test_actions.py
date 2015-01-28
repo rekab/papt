@@ -10,6 +10,15 @@ import test_actions
 class TestTest(base_test.FlaskBaseTest):
   def setUp(self):
     base_test.FlaskBaseTest.setUp(self, test_actions)
+    self.mail_test_result_called = False
+    self.orig_mail_test_result = test_actions.MailTestResult
+    test_actions.MailTestResult = self.MockMailTestResult
+
+  def tearDown(self):
+    test_actions.MailTestResult = self.orig_mail_test_result
+
+  def MockMailTestResult(self, test_result):
+    self.mail_test_result_called = True
 
   def testMissingData(self):
     data = json.dumps({})
@@ -122,6 +131,7 @@ class TestTest(base_test.FlaskBaseTest):
     return self.app.post('/test/answer', data=data, content_type='application/json')
 
   def testUserFinishesTest(self):
+    self.assertFalse(self.mail_test_result_called)
     username = 'user-answers-everything-2'
     token = 'foo'
     flavor = 'bar'
@@ -163,6 +173,7 @@ class TestTest(base_test.FlaskBaseTest):
     self.assertTrue(test_result.time_finished)
     self.assertEquals(flavor, test_result.flavor)
     self.assertEquals(len(words + [last_word]), len(test_result.answers))
+    self.assertTrue(self.mail_test_result_called)
 
   def testTestNotStarted(self):
     username = 'user-answers-everything-2'
