@@ -92,12 +92,13 @@ def finish():
 def MailTestResult(user, test_result):
   src = mail_settings.EMAIL_SOURCE
   dest = mail_settings.EMAIL_DESTINATION
-  subject = mail_settings.SUBJECT
-  xls_title, xls_attachment = GenerateExcelFile(test_result)
+  subject = mail_settings.SUBJECT + ' ' + str(user.name) + ' test ' + test_result.flavor
+  #xls_title, xls_attachment = GenerateExcelFile(test_result)
   mail.send_mail(
       sender=src, to=dest, subject=subject,
-      html=report_generator.GetUserReport(user, test_result),
-      attachments=[(xls_title, xls_attachment)])
+      body='Only HTML is supported, sorry.',
+      html=report_generator.GetUserReport(user, [test_result]))
+  #    attachments=[(xls_title, xls_attachment)])
 
 
 def GenerateExcelFile(test_result):
@@ -105,7 +106,7 @@ def GenerateExcelFile(test_result):
   output = StringIO.StringIO()
   workbook = xlsxwriter.Workbook(output)
   worksheet = workbook.add_worksheet()
-  workblook.close()
+  workbook.close()
 
   output.seek(0)
   return (title, output.read())
