@@ -12,6 +12,7 @@ from google.appengine.api import mail
 from google.appengine.ext import ndb
 
 import model
+import report_generator
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -84,22 +85,30 @@ def finish():
 
   test_result.time_finished = datetime.datetime.now()
   test_result.put()
-  MailTestResult(test_result)
+  MailTestResult(user, test_result)
   return jsonify(message='ok')
 
 
-def MailTestResult(test_result):
+def MailTestResult(user, test_result):
   src = mail_settings.EMAIL_SOURCE
   dest = mail_settings.EMAIL_DESTINATION
   subject = mail_settings.SUBJECT
-  attachment = GenerateExcelFile(test_result)
+  xls_title, xls_attachment = GenerateExcelFile(test_result)
   mail.send_mail(
-      sender=src, to=dest, subject=subject, body="Here's some stuff.",
-      attachments=[('papt.xls', attachment)])
+      sender=src, to=dest, subject=subject,
+      html=report_generator.GetUserReport(user, test_result),
+      attachments=[(xls_title, xls_attachment)])
 
 
 def GenerateExcelFile(test_result):
-  return 'asdf'
+  title = 'papt.xlsx'
+  output = StringIO.StringIO()
+  workbook = xlsxwriter.Workbook(output)
+  worksheet = workbook.add_worksheet()
+  workblook.close()
+
+  output.seek(0)
+  return (title, output.read())
 
 
 @app.route('/test/answer', methods=['POST'])

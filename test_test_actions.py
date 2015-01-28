@@ -17,7 +17,7 @@ class TestTest(base_test.FlaskBaseTest):
   def tearDown(self):
     test_actions.MailTestResult = self.orig_mail_test_result
 
-  def MockMailTestResult(self, test_result):
+  def MockMailTestResult(self, user, test_result):
     self.mail_test_result_called = True
 
   def testMissingData(self):
@@ -180,3 +180,7 @@ class TestTest(base_test.FlaskBaseTest):
     token = 'foo'
     base_test.CreateUserWithToken(username, token)
     self.VerifyUnhappyResponse(self.PostAnswer(username, token, 'pair', 'flavor'))
+
+  def testMailTestResults(self):
+    pass
+    #self.orig_mail_test_result = test_actions.MailTestResult
